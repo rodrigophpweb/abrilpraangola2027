@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+
+  db:
+    image: mysql:8.0
+    container_name: abril_pra_angola_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+      MYSQL_ROOT_PASSWORD: rootpassword
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - wordpress_net
+
+  wordpress:
+    image: wordpress:latest
+    container_name: abril_pra_angola_wp
+    restart: unless-stopped
+    depends_on:
+      - db
+      - mailhog
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DEBUG: 1
+      WORDPRESS_DEBUG_LOG: 1
+      WORDPRESS_DEBUG_DISPLAY: 0
+      # Limites PHP via variável de ambiente
+      PHP_INI_UPLOAD_MAX_FILESIZE: 128M
+      PHP_INI_POST_MAX_SIZE: 128M
+      PHP_INI_MEMORY_LIMIT: 256M
+    volumes:
+      # Persiste TODO o WordPress (core, plugins, uploads, configurações)
+      - wp_data:/var/www/html
+      # Monta a pasta do tema diretamente no container (desenvolvimento)
+      - ./abril-pra-angola:/var/www/html/wp-content/themes/abril-pra-angola
+      # Aplica configurações PHP personalizadas
+      - ./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini
+    networks:
+      - wordpress_net
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: abril_mailhog
+    restart: unless-stopped
+    ports:
+      - "1025:1025"  # SMTP — usado pelo WordPress internamente
+      - "8025:8025"  # Interface web — acede em http://localhost:8025
+    networks:
+      - wordpress_net
+
+volumes:
+  db_data:
+  wp_data:
+
+networks:
+  wordpress_net:
+    driver: bridge

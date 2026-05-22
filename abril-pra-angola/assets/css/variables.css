@@ -1,0 +1,303 @@
+/* ====================================================
+   ABRIL PRA ANGOLA — Design Tokens / Variables
+   ==================================================== */
+
+/* ────────────────────────────────────────────────────
+   1. GOOGLE FONTS
+   ──────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
+
+:root {
+
+    /* ────────────────────────────────────────────────
+       2. CORES — Paleta Principal
+       ──────────────────────────────────────────────── */
+
+    /* Primária */
+    --color-primary-100: #FDE8D0;
+    --color-primary-200: #FBCFA0;
+    --color-primary-300: #F9A855;
+    --color-primary-400: #F7881A;
+    --color-primary-500: #E5720A;   /* Base */
+    --color-primary-600: #C05E07;
+    --color-primary-700: #994A05;
+    --color-primary-800: #733703;
+    --color-primary-900: #4C2402;
+
+    /* Secundária */
+    --color-secondary-100: #D5E8F5;
+    --color-secondary-200: #A8CFEA;
+    --color-secondary-300: #6AAEDB;
+    --color-secondary-400: #2F8EC8;
+    --color-secondary-500: #1A72AA;  /* Base */
+    --color-secondary-600: #155D8C;
+    --color-secondary-700: #10476D;
+    --color-secondary-800: #0B324F;
+    --color-secondary-900: #061C2E;
+
+    /* Acento */
+    --color-accent-100: #FDFBD0;
+    --color-accent-200: #FAF59F;
+    --color-accent-300: #F6ED5E;
+    --color-accent-400: #F2E21D;
+    --color-accent-500: #D9C90A;    /* Base */
+    --color-accent-600: #B3A608;
+    --color-accent-700: #8C8206;
+    --color-accent-800: #665F04;
+    --color-accent-900: #403C02;
+
+    /* Neutros */
+    --color-neutral-0:   #FFFFFF;
+    --color-neutral-50:  #F9F9F9;
+    --color-neutral-100: #F2F2F2;
+    --color-neutral-200: #E0E0E0;
+    --color-neutral-300: #C4C4C4;
+    --color-neutral-400: #A0A0A0;
+    --color-neutral-500: #767676;
+    --color-neutral-600: #525252;
+    --color-neutral-700: #383838;
+    --color-neutral-800: #1F1F1F;
+    --color-neutral-900: #0D0D0D;
+
+    /* Semânticas */
+    --color-success:  #27AE60;
+    --color-warning:  #F2994A;
+    --color-error:    #EB5757;
+    --color-info:     #2F80ED;
+
+    /* Aliases de uso comum */
+    --color-brand:      var(--color-primary-500);
+    --color-bg:         var(--color-neutral-0);
+    --color-bg-alt:     var(--color-neutral-50);
+    --color-text:       var(--color-neutral-800);
+    --color-text-muted: var(--color-neutral-500);
+    --color-border:     var(--color-neutral-200);
+    --color-link:       var(--color-secondary-500);
+    --color-link-hover: var(--color-secondary-700);
+
+    /* ────────────────────────────────────────────────
+       3. TIPOGRAFIA
+       ──────────────────────────────────────────────── */
+
+    --font-family-base:    "Open Sans", sans-serif;
+    --font-family-heading: "Open Sans", sans-serif;
+    --font-family-mono:    "Courier New", Courier, monospace;
+
+    /* Escala de tamanhos (base 16px) */
+    --font-size-xs:   0.75rem;   /* 12px */
+    --font-size-sm:   0.875rem;  /* 14px */
+    --font-size-base: 1rem;      /* 16px */
+    --font-size-md:   1.125rem;  /* 18px */
+    --font-size-lg:   1.25rem;   /* 20px */
+    --font-size-xl:   1.5rem;    /* 24px */
+    --font-size-2xl:  1.875rem;  /* 30px */
+    --font-size-3xl:  2.25rem;   /* 36px */
+    --font-size-4xl:  3rem;      /* 48px */
+    --font-size-5xl:  3.75rem;   /* 60px */
+
+    /* Pesos */
+    --font-weight-light:    300;
+    --font-weight-regular:  400;
+    --font-weight-medium:   500;
+    --font-weight-semibold: 600;
+    --font-weight-bold:     700;
+    --font-weight-extrabold:800;
+
+    /* Alturas de linha */
+    --line-height-tight:  1.2;
+    --line-height-snug:   1.375;
+    --line-height-normal: 1.5;
+    --line-height-relaxed:1.625;
+    --line-height-loose:  2;
+
+    /* Espaçamento entre letras */
+    --letter-spacing-tight:  -0.025em;
+    --letter-spacing-normal:  0em;
+    --letter-spacing-wide:    0.025em;
+    --letter-spacing-wider:   0.05em;
+    --letter-spacing-widest:  0.1em;
+
+    /* ────────────────────────────────────────────────
+       4. ESPAÇAMENTO
+       ──────────────────────────────────────────────── */
+
+    --spacing-0:   0;
+    --spacing-1:   0.25rem;   /* 4px  */
+    --spacing-2:   0.5rem;    /* 8px  */
+    --spacing-3:   0.75rem;   /* 12px */
+    --spacing-4:   1rem;      /* 16px */
+    --spacing-5:   1.25rem;   /* 20px */
+    --spacing-6:   1.5rem;    /* 24px */
+    --spacing-8:   2rem;      /* 32px */
+    --spacing-10:  2.5rem;    /* 40px */
+    --spacing-12:  3rem;      /* 48px */
+    --spacing-16:  4rem;      /* 64px */
+    --spacing-20:  5rem;      /* 80px */
+    --spacing-24:  6rem;      /* 96px */
+    --spacing-32:  8rem;      /* 128px */
+
+    /* ────────────────────────────────────────────────
+       5. LAYOUT & GRID
+       ──────────────────────────────────────────────── */
+
+    --container-sm:  640px;
+    --container-md:  768px;
+    --container-lg:  1024px;
+    --container-xl:  1280px;
+    --container-2xl: 1440px;
+
+    --container-padding-x: var(--spacing-6);
+    --section-padding-y:   var(--spacing-20);
+
+    /* ────────────────────────────────────────────────
+       6. BORDAS
+       ──────────────────────────────────────────────── */
+
+    --border-width-thin:   1px;
+    --border-width-base:   2px;
+    --border-width-thick:  4px;
+
+    --border-color: var(--color-border);
+
+    --radius-sm:   4px;
+    --radius-md:   8px;
+    --radius-lg:   12px;
+    --radius-xl:   16px;
+    --radius-2xl:  24px;
+    --radius-full: 9999px;
+
+    /* ────────────────────────────────────────────────
+       7. SOMBRAS
+       ──────────────────────────────────────────────── */
+
+    --shadow-xs:  0 1px 2px rgba(0, 0, 0, 0.05);
+    --shadow-sm:  0 1px 3px rgba(0, 0, 0, 0.10), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --shadow-md:  0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.06);
+    --shadow-lg:  0 10px 15px rgba(0, 0, 0, 0.10), 0 4px 6px rgba(0, 0, 0, 0.05);
+    --shadow-xl:  0 20px 25px rgba(0, 0, 0, 0.10), 0 10px 10px rgba(0, 0, 0, 0.04);
+    --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.25);
+    --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+
+    /* ────────────────────────────────────────────────
+       8. TRANSIÇÕES & ANIMAÇÕES
+       ──────────────────────────────────────────────── */
+
+    --transition-fast:   150ms ease-in-out;
+    --transition-base:   250ms ease-in-out;
+    --transition-slow:   400ms ease-in-out;
+    --transition-bounce: 300ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    /* ────────────────────────────────────────────────
+       9. Z-INDEX
+       ──────────────────────────────────────────────── */
+
+    --z-below:   -1;
+    --z-base:     0;
+    --z-raised:   10;
+    --z-dropdown: 100;
+    --z-sticky:   200;
+    --z-fixed:    300;
+    --z-modal:    400;
+    --z-toast:    500;
+    --z-tooltip:  600;
+
+    /* ────────────────────────────────────────────────
+       10. BREAKPOINTS (referência — use em @media)
+       ──────────────────────────────────────────────── */
+    /* sm:  640px  | @media (min-width: 640px)  */
+    /* md:  768px  | @media (min-width: 768px)  */
+    /* lg:  1024px | @media (min-width: 1024px) */
+    /* xl:  1280px | @media (min-width: 1280px) */
+}
+
+/* ====================================================
+   RESET & BASE
+   ==================================================== */
+
+*,
+*::before,
+*::after {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    outline: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-regular);
+    line-height: var(--line-height-normal);
+    color: var(--color-text);
+    background-color: var(--color-bg);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-family-heading);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    color: var(--color-text);
+}
+
+h1 { font-size: var(--font-size-4xl); }
+h2 { font-size: var(--font-size-3xl); }
+h3 { font-size: var(--font-size-2xl); }
+h4 { font-size: var(--font-size-xl);  }
+h5 { font-size: var(--font-size-lg);  }
+h6 { font-size: var(--font-size-md);  }
+
+/* Links */
+a {
+    color: var(--color-link);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+a:hover {
+    color: var(--color-link-hover);
+}
+
+/* Imagens */
+img,
+video {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Listas */
+ul, ol {
+    list-style: none;
+}
+
+/* Botões */
+button {
+    cursor: pointer;
+    background: none;
+    font-family: var(--font-family-base);
+}
+
+/* Inputs */
+input,
+textarea,
+select {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+}
+
+/* Container utilitário */
+.container {
+    width: 100%;
+    max-width: var(--container-xl);
+    margin-inline: auto;
+    padding-inline: var(--container-padding-x);
+}
