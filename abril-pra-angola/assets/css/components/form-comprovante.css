@@ -1,0 +1,165 @@
+/* ====================================================
+   COMPONENTE — FORMULÁRIO ENVIAR COMPROVANTE
+   CSS Nesting + Grid Layout | Sem Flexbox
+   Breakpoints: sm 640px | md 768px | lg 1024px
+   ==================================================== */
+
+/* ────────────────────────────────────────────────────
+   PÁGINA WRAPPER
+   ──────────────────────────────────────────────────── */
+.page-comprovante {
+    padding-block: var(--spacing-12) var(--spacing-24);
+    background-color: var(--color-bg-alt);
+    min-height: 100svh;
+
+    & .page-comprovante__header {
+        text-align: center;
+        margin-block-end: var(--spacing-10);
+
+        & h1 {
+            font-size: var(--font-size-2xl);
+            font-weight: var(--font-weight-extrabold);
+            color: var(--color-primary-600);
+            margin-block-end: var(--spacing-3);
+            line-height: var(--line-height-snug);
+
+            @media (min-width: 768px) {
+                font-size: var(--font-size-3xl);
+            }
+        }
+
+        & p {
+            font-size: var(--font-size-base);
+            color: var(--color-text-muted);
+
+            @media (min-width: 768px) {
+                font-size: var(--font-size-md);
+            }
+        }
+    }
+
+    /* ── Card de informações do inscrito ── */
+    & .comprovante-info {
+        display: grid;
+        gap: var(--spacing-3);
+        background-color: var(--color-neutral-0);
+        border-radius: var(--radius-xl);
+        padding: var(--spacing-6) var(--spacing-8);
+        box-shadow: var(--shadow-sm);
+        border: var(--border-width-thin) solid var(--color-border);
+        border-inline-start: var(--border-width-thick) solid var(--color-primary-400);
+        margin-block-end: var(--spacing-8);
+        max-width: var(--container-md);
+        margin-inline: auto;
+
+        & p {
+            font-size: var(--font-size-base);
+            line-height: var(--line-height-relaxed);
+            color: var(--color-text);
+            margin: 0;
+
+            & strong {
+                color: var(--color-primary-700);
+                font-weight: var(--font-weight-semibold);
+            }
+        }
+    }
+
+    /* ── Formulário de upload ── */
+    & .form-comprovante {
+        display: grid;
+        gap: var(--spacing-6);
+        background-color: var(--color-neutral-0);
+        border-radius: var(--radius-xl);
+        padding: var(--spacing-6);
+        box-shadow: var(--shadow-sm);
+        border: var(--border-width-thin) solid var(--color-border);
+        max-width: var(--container-sm);
+        margin-inline: auto;
+        transition: box-shadow var(--transition-base);
+
+        @media (min-width: 640px) {
+            padding: var(--spacing-8);
+        }
+
+        &:focus-within {
+            box-shadow: var(--shadow-md);
+            border-color: var(--color-primary-200);
+        }
+
+        /* ── Campos ── */
+        & .form-group {
+            display: grid;
+            gap: var(--spacing-2);
+
+            & label {
+                font-size: var(--font-size-sm);
+                font-weight: var(--font-weight-semibold);
+                color: var(--color-neutral-700);
+                letter-spacing: var(--letter-spacing-wide);
+            }
+
+            & input[type="date"] {
+                width: 100%;
+                padding: var(--spacing-3) var(--spacing-4);
+                border: var(--border-width-thin) solid var(--color-border);
+                border-radius: var(--radius-md);
+                font-size: var(--font-size-base);
+                font-family: var(--font-family-base);
+                color: var(--color-text);
+                background-color: var(--color-neutral-0);
+                transition: border-color var(--transition-fast),
+                            box-shadow var(--transition-fast);
+
+                &:focus {
+                    border-color: var(--color-primary-400);
+                    box-shadow: 0 0 0 3px var(--color-primary-100);
+                    outline: none;
+                }
+            }
+
+            /* ── Input file — zona de upload estilizada ── */
+            & input[type="file"] {
+                width: 100%;
+                padding: var(--spacing-3) var(--spacing-4);
+                border: var(--border-width-base) dashed var(--color-border);
+                border-radius: var(--radius-md);
+                font-size: var(--font-size-sm);
+                font-family: var(--font-family-base);
+                color: var(--color-text-muted);
+                background-color: var(--color-neutral-50);
+                cursor: pointer;
+                transition: border-color var(--transition-fast),
+                            background-color var(--transition-fast);
+
+                &:hover {
+                    border-color: var(--color-primary-300);
+                    background-color: var(--color-primary-100);
+                }
+
+                &:focus {
+                    border-color: var(--color-primary-400);
+                    box-shadow: 0 0 0 3px var(--color-primary-100);
+                    outline: none;
+                }
+            }
+
+            & .description {
+                font-size: var(--font-size-xs);
+                color: var(--color-text-muted);
+                line-height: var(--line-height-relaxed);
+            }
+        }
+
+        /* ── Botão de envio ── */
+        & .form-comprovante__submit {
+            display: grid;
+            justify-items: stretch;
+
+            @media (min-width: 640px) {
+                justify-items: start;
+            }
+        }
+    }
+}
+

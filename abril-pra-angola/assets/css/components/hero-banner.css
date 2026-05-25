@@ -1,0 +1,246 @@
+/* ====================================================
+   COMPONENTE — HERO BANNER / COUNTDOWN
+   CSS Nesting + Grid Layout | Sem Flexbox
+   Breakpoints: md 768px | sm 420px
+   ==================================================== */
+
+.event-countdown {
+    --hero-bg-image: none; /* sobrescrito pelo inline style via PHP */
+
+    padding: calc(var(--header-height, 182px) + 80px) 20px 80px;
+    background-color: #111;
+    background-image: var(--hero-bg-image);
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    color: #fff;
+    font-family: var(--font-family-base), sans-serif;
+    text-align: center;
+    position: relative;
+
+    /* ── Cabeçalho ── */
+    & .event-countdown__header {
+        max-width: 980px;
+        margin: 0 auto 48px;
+    }
+
+    & .event-countdown__eyebrow {
+        margin-block-end: 12px;
+        color: var(--color-primary-0);
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+    }
+
+    & h2 {
+        margin: 0 0 16px;
+        font-size: clamp(32px, 5vw, 56px);
+        line-height: 1.1;
+        color: #fff;
+    }
+
+    & .event-countdown__text {
+        margin: 0 auto 18px;
+        max-width: 620px;
+        color: #ddd;
+        font-size: 18px;
+        line-height: 1.6;
+    }
+
+    & .event-countdown__date {
+        display: inline-grid;
+        color: #fff;
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    /* ── Grid de tempo ── */
+    & .event-countdown__list {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 0;
+        list-style: none;
+
+        @media (max-width: 768px) {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        @media (max-width: 420px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    /* ── Card de cada unidade de tempo ── */
+    & .event-countdown__item {
+        position: relative;
+        overflow: hidden;
+        display: grid;
+        place-items: center;
+        min-width: 0;
+        min-height: 180px;
+        padding: 28px 16px;
+        background: #1c1c1c;
+        border: 1px solid var(--color-primary-0);
+        border-radius: 18px;
+        transition: transform .25s ease,
+                    border-color .25s ease,
+                    box-shadow .25s ease,
+                    background .25s ease;
+
+        &::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(
+                circle at top left,
+                var(--color-primary-0),
+                transparent 45%
+            );
+            opacity: 0;
+            transition: opacity .25s ease;
+        }
+
+        &:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: var(--color-primary-0);
+            box-shadow: 0 18px 40px rgba(212, 175, 55, .15),
+                        inset 0 0 0 1px rgba(212, 175, 55, .08);
+        }
+
+        &:hover::before { opacity: 1; }
+
+        & time,
+        & span {
+            position: relative;
+            z-index: 2;
+        }
+
+        & time {
+            display: block;
+            color: var(--color-primary-0);
+            font-size: clamp(42px, 6vw, 72px);
+            font-weight: 800;
+            line-height: 1;
+            transition: transform .25s ease;
+        }
+
+        & span {
+            display: block;
+            margin-block-start: 12px;
+            color: #fff;
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        &:hover time { animation: countdownPulse .45s ease; }
+    }
+
+    /* ── Botão CTA ── */
+    & .event-countdown__cta {
+        display: grid;
+        justify-items: center;
+        margin-block-start: 42px;
+        background-color: transparent;
+    }
+
+    & .event-countdown__button {
+        display: inline-grid;
+        place-items: center;
+        position: relative;
+        overflow: hidden;
+        min-height: 58px;
+        padding: 16px 36px;
+        border-radius: 999px;
+        background: var(--color-primary-0);
+        color: #111;
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: 800;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        transition: transform .2s ease, box-shadow .2s ease;
+        box-shadow: 0 8px 24px var(--color-primary-0);
+
+        &::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -80%;
+            width: 40%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, .55),
+                transparent
+            );
+            transform: skewX(-20deg);
+        }
+
+        &:hover {
+            transform: translateY(-4px) scale(1.04);
+            box-shadow: 0 16px 36px rgba(212, 175, 55, .35);
+        }
+
+        &:hover::after { animation: buttonShine .8s ease; }
+
+        &:focus-visible {
+            outline: 3px solid #fff;
+            outline-offset: 4px;
+        }
+    }
+
+    /* ── Animações de entrada ── */
+    & .event-countdown__header,
+    & .event-countdown__item,
+    & .event-countdown__cta {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    &.is-visible {
+        & .event-countdown__header                { animation: fadeSlideUp .8s ease       forwards; }
+        & .event-countdown__item:nth-child(1)     { animation: fadeSlideUp .7s ease .15s  forwards; }
+        & .event-countdown__item:nth-child(2)     { animation: fadeSlideUp .7s ease .30s  forwards; }
+        & .event-countdown__item:nth-child(3)     { animation: fadeSlideUp .7s ease .45s  forwards; }
+        & .event-countdown__item:nth-child(4)     { animation: fadeSlideUp .7s ease .60s  forwards; }
+        & .event-countdown__cta                   { animation: fadeSlideUp .7s ease .80s  forwards; }
+    }
+}
+
+/* ── Keyframes ── */
+@keyframes countdownPulse {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.12); }
+    100% { transform: scale(1); }
+}
+
+@keyframes buttonShine {
+    from { left: -80%; }
+    to   { left: 140%; }
+}
+
+@keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Respeita preferência de movimento reduzido ── */
+@media (prefers-reduced-motion: reduce) {
+    .event-countdown {
+        & .event-countdown__header,
+        & .event-countdown__item,
+        & .event-countdown__cta {
+            opacity: 1;
+            transform: none;
+            animation: none;
+        }
+    }
+}
+

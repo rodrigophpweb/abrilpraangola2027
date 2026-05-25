@@ -7,14 +7,14 @@
 
 function abril_enqueue_styles_and_scripts() {
 
-    $theme_uri = get_template_directory_uri();
-    $version   = '1.0.0';
+    $theme_uri      = get_template_directory_uri();
+    $components_uri = $theme_uri . '/assets/css/components/';
+    $pages_css_uri  = $theme_uri . '/assets/css/pages/';
+    $version        = '1.0.0';
 
     // ─────────────────────────────────────────────────────────
-    // Estilos globais
+    // 1. Variáveis CSS (Design Tokens) — base de tudo
     // ─────────────────────────────────────────────────────────
-
-    // Reset, variáveis CSS e base tipográfica
     wp_enqueue_style(
         'abril-variables',
         $theme_uri . '/assets/css/variables.css',
@@ -22,7 +22,9 @@ function abril_enqueue_styles_and_scripts() {
         $version
     );
 
-    // Folha de estilos principal do tema (style.css)
+    // ─────────────────────────────────────────────────────────
+    // 2. Folha principal do tema (só o cabeçalho WordPress)
+    // ─────────────────────────────────────────────────────────
     wp_enqueue_style(
         'abril-style',
         get_stylesheet_uri(),
@@ -30,17 +32,56 @@ function abril_enqueue_styles_and_scripts() {
         $version
     );
 
+    // Font Awesome — ícones das redes sociais no front-end
+    wp_enqueue_style(
+        'abril-fontawesome',
+        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css',
+        [],
+        '6.5.2'
+    );
+
     // ─────────────────────────────────────────────────────────
-    // CSS específico por página
+    // 3. Componentes globais (carregam em todas as páginas)
     // ─────────────────────────────────────────────────────────
 
-    $pages_css_uri = $theme_uri . '/assets/css/pages/';
+    // Botões
+    wp_enqueue_style(
+        'abril-buttons',
+        $components_uri . 'button.css',
+        [ 'abril-variables' ],
+        $version
+    );
 
-    /**
-     * Mapeamento: condição WordPress → arquivo CSS
-     *
-     * Formato: [ callable_condition, handle, arquivo.css ]
-     */
+    // Alertas / Mensagens de feedback
+    wp_enqueue_style(
+        'abril-alerts',
+        $components_uri . 'alert.css',
+        [ 'abril-variables' ],
+        $version
+    );
+
+    // Header
+    wp_enqueue_style(
+        'abril-header',
+        $components_uri . 'header.css',
+        [ 'abril-variables' ],
+        $version
+    );
+
+    // Footer
+    wp_enqueue_style(
+        'abril-footer',
+        $components_uri . 'footer.css',
+        [ 'abril-variables' ],
+        $version
+    );
+
+    // ─────────────────────────────────────────────────────────
+    // 4. CSS específico por página / template
+    // ─────────────────────────────────────────────────────────
+
+    $global_deps = [ 'abril-style', 'abril-buttons', 'abril-alerts' ];
+
     $page_styles = [
 
         // Home (front-page.php)
@@ -59,9 +100,23 @@ function abril_enqueue_styles_and_scripts() {
 
         // Inscrição
         [
-            'condition' => is_page( 'inscricao' ),
+            'condition' => is_page_template( 'template-pages/subscribe.php' ),
             'handle'    => 'abril-page-inscricao',
             'file'      => 'inscricao.css',
+        ],
+
+        // Enviar Comprovante
+        [
+            'condition' => is_page_template( 'template-pages/enviar-comprovante.php' ),
+            'handle'    => 'abril-page-comprovante',
+            'file'      => 'enviar-comprovante.css',
+        ],
+
+        // Minha Inscrição
+        [
+            'condition' => is_page_template( 'template-pages/minha-inscricao.php' ),
+            'handle'    => 'abril-page-minha-inscricao',
+            'file'      => 'minha-inscricao.css',
         ],
 
         // Localização
@@ -99,11 +154,25 @@ function abril_enqueue_styles_and_scripts() {
             'file'      => 'contato.css',
         ],
 
-        // Single post (qualquer post individual)
+        // Página genérica
+        [
+            'condition' => is_page() && ! is_page_template(),
+            'handle'    => 'abril-page',
+            'file'      => 'page.css',
+        ],
+
+        // Single post
         [
             'condition' => is_single(),
             'handle'    => 'abril-single',
             'file'      => 'single.css',
+        ],
+
+        // Busca
+        [
+            'condition' => is_search(),
+            'handle'    => 'abril-search',
+            'file'      => 'search.css',
         ],
 
     ];
@@ -113,14 +182,14 @@ function abril_enqueue_styles_and_scripts() {
             wp_enqueue_style(
                 $style['handle'],
                 $pages_css_uri . $style['file'],
-                [ 'abril-style' ],
+                $global_deps,
                 $version
             );
         }
     }
 
     // ─────────────────────────────────────────────────────────
-    // Scripts
+    // 5. Scripts
     // ─────────────────────────────────────────────────────────
 
     wp_enqueue_script(
@@ -128,7 +197,17 @@ function abril_enqueue_styles_and_scripts() {
         $theme_uri . '/assets/js/main.js',
         [],
         $version,
-        true // carrega no rodapé
+        true
     );
+
+    // Localiza dados necessários para o formulário de inscrição
+    if ( is_page_template( 'template-pages/subscribe.php' ) ) {
+        $pix_opts = function_exists( 'abril_get_pagamento_options' ) ? abril_get_pagamento_options() : [];
+        wp_localize_script( 'abril-main', 'abrilData', [
+            'pixChave'    => $pix_opts['pix_chave']             ?? '',
+            'pixNome'     => $pix_opts['pix_nome_beneficiario'] ?? 'Abril pra Angola',
+            'pixCidade'   => $pix_opts['pix_cidade']            ?? 'Sao Paulo',
+        ] );
+    }
 }
 add_action( 'wp_enqueue_scripts', 'abril_enqueue_styles_and_scripts' );

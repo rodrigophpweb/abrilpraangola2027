@@ -1,0 +1,398 @@
+/* ====================================================
+   COMPONENTE — FORMULÁRIO DE INSCRIÇÃO
+   CSS Nesting + Grid Layout | Sem Flexbox
+   Breakpoints: sm 640px | md 768px | lg 1024px
+   ==================================================== */
+
+/* ────────────────────────────────────────────────────
+   PÁGINA WRAPPER
+   ──────────────────────────────────────────────────── */
+.page-inscricao {
+    padding-block: var(--spacing-12) var(--spacing-24);
+    background-color: var(--color-bg-alt);
+    min-height: 100svh;
+
+    & .page-inscricao__header {
+        text-align: center;
+        margin-block-end: var(--spacing-10);
+
+        & h1 {
+            font-size: var(--font-size-2xl);
+            font-weight: var(--font-weight-extrabold);
+            color: var(--color-primary-600);
+            margin-block-end: var(--spacing-3);
+            line-height: var(--line-height-snug);
+
+            @media (min-width: 768px) {
+                font-size: var(--font-size-3xl);
+            }
+        }
+
+        & p {
+            font-size: var(--font-size-base);
+            color: var(--color-text-muted);
+
+            @media (min-width: 768px) {
+                font-size: var(--font-size-md);
+            }
+        }
+    }
+}
+
+
+/* ────────────────────────────────────────────────────
+   FORMULÁRIO DE INSCRIÇÃO
+   ──────────────────────────────────────────────────── */
+.form-inscricao {
+    display: grid;
+    gap: var(--spacing-6);
+
+    @media (min-width: 768px) {
+        gap: var(--spacing-8);
+    }
+
+    /* ── Fieldset base ── */
+    & .form-inscricao__fieldset {
+        display: grid;
+        gap: var(--spacing-5);
+        background-color: var(--color-neutral-0);
+        border-radius: var(--radius-xl);
+        padding: var(--spacing-6);
+        box-shadow: var(--shadow-sm);
+        border: var(--border-width-thin) solid var(--color-border);
+        transition: box-shadow var(--transition-base);
+
+        @media (min-width: 640px) {
+            padding: var(--spacing-8);
+        }
+
+        &:focus-within {
+            box-shadow: var(--shadow-md);
+            border-color: var(--color-primary-200);
+        }
+
+        & legend {
+            font-size: var(--font-size-md);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-primary-600);
+            padding-block-end: var(--spacing-4);
+            border-block-end: var(--border-width-thin) solid var(--color-primary-100);
+            width: 100%;
+            margin-block-end: var(--spacing-2);
+            letter-spacing: var(--letter-spacing-wide);
+        }
+    }
+
+    /* ── Dados Pessoais e Dados de Capoeira — 2 colunas no desktop ──
+       1ª linha: campo full-width | 2ª linha: 2 campos lado a lado
+    ── */
+    & .form-inscricao__fieldset:nth-of-type(1),
+    & .form-inscricao__fieldset:nth-of-type(2) {
+        @media (min-width: 768px) {
+            grid-template-columns: 1fr 1fr;
+
+            & legend {
+                grid-column: 1 / -1;
+            }
+
+            & .form-group:first-of-type {
+                grid-column: 1 / -1;
+            }
+        }
+    }
+
+    /* ── Form Group ── */
+    & .form-group {
+        display: grid;
+        gap: var(--spacing-2);
+
+        & label:not(.radio-label):not(.checkbox-label) {
+            font-size: var(--font-size-sm);
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-neutral-700);
+            letter-spacing: var(--letter-spacing-wide);
+        }
+
+        /* ── Inputs e Selects ── */
+        & input[type="text"],
+        & input[type="email"],
+        & input[type="tel"],
+        & select {
+            width: 100%;
+            padding: var(--spacing-3) var(--spacing-4);
+            border: var(--border-width-thin) solid var(--color-border);
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-base);
+            font-family: var(--font-family-base);
+            color: var(--color-text);
+            background-color: var(--color-neutral-0);
+            transition: border-color var(--transition-fast),
+                        box-shadow var(--transition-fast),
+                        background-color var(--transition-fast);
+
+            &:hover {
+                border-color: var(--color-neutral-400);
+            }
+
+            &:focus {
+                border-color: var(--color-primary-400);
+                box-shadow: 0 0 0 3px var(--color-primary-100);
+                outline: none;
+            }
+
+            &:invalid:not(:placeholder-shown) {
+                border-color: var(--color-error);
+                background-color: #fef2f2;
+            }
+
+            &::placeholder {
+                color: var(--color-neutral-400);
+                font-weight: var(--font-weight-light);
+            }
+        }
+
+        /* ── Select com seta customizada ── */
+        & select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23767676' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right var(--spacing-4) center;
+            padding-inline-end: var(--spacing-10);
+            cursor: pointer;
+        }
+
+        /* ── Dois selects lado a lado ── */
+        &.form-group--inline {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--spacing-5);
+
+            @media (min-width: 640px) {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            & > div {
+                display: grid;
+                gap: var(--spacing-2);
+
+                & label {
+                    font-size: var(--font-size-sm);
+                    font-weight: var(--font-weight-semibold);
+                    color: var(--color-neutral-700);
+                    letter-spacing: var(--letter-spacing-wide);
+                }
+            }
+        }
+    }
+
+    /* ── Radio Group — Tamanho de camiseta ── */
+    & .radio-group {
+        display: grid;
+        grid-template-columns: repeat(4, auto);
+        gap: var(--spacing-3);
+        justify-content: start;
+
+        @media (max-width: 479px) {
+            grid-template-columns: repeat(2, auto);
+        }
+    }
+
+    & .radio-label {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        gap: var(--spacing-2);
+        cursor: pointer;
+        padding: var(--spacing-3) var(--spacing-5);
+        border: var(--border-width-base) solid var(--color-border);
+        border-radius: var(--radius-md);
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-bold);
+        letter-spacing: var(--letter-spacing-wider);
+        transition: border-color var(--transition-fast),
+                    background-color var(--transition-fast),
+                    color var(--transition-fast),
+                    box-shadow var(--transition-fast);
+
+        &:hover {
+            border-color: var(--color-primary-300);
+            background-color: var(--color-primary-100);
+        }
+
+        &:has(input[type="radio"]:checked) {
+            border-color: var(--color-primary-500);
+            background-color: var(--color-primary-100);
+            color: var(--color-primary-700);
+            box-shadow: 0 0 0 2px var(--color-primary-300);
+        }
+
+        & input[type="radio"] {
+            width: 1rem;
+            height: 1rem;
+            accent-color: var(--color-primary-500);
+            cursor: pointer;
+        }
+    }
+
+    /* ── Checkbox — Transporte e Termos ── */
+    & .checkbox-label {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: var(--spacing-3);
+        align-items: start;
+        cursor: pointer;
+        font-size: var(--font-size-base);
+        line-height: var(--line-height-relaxed);
+        color: var(--color-text);
+        padding: var(--spacing-3);
+        border-radius: var(--radius-md);
+        border: var(--border-width-thin) solid transparent;
+        transition: background-color var(--transition-fast),
+                    border-color var(--transition-fast);
+
+        &:hover {
+            background-color: var(--color-neutral-50);
+            border-color: var(--color-border);
+        }
+
+        &:has(input[type="checkbox"]:checked) {
+            background-color: var(--color-primary-100);
+            border-color: var(--color-primary-300);
+        }
+
+        & input[type="checkbox"] {
+            width: 1.125rem;
+            height: 1.125rem;
+            margin-block-start: 0.25rem;
+            accent-color: var(--color-primary-500);
+            cursor: pointer;
+        }
+    }
+
+    /* ── Preço dinâmico do pacote ── */
+    & .pacote-preco {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        align-items: center;
+        gap: var(--spacing-2);
+        padding: var(--spacing-3) var(--spacing-4);
+        background-color: var(--color-accent-100);
+        border-radius: var(--radius-md);
+        border: var(--border-width-thin) solid var(--color-accent-300);
+        font-size: var(--font-size-sm);
+        color: var(--color-accent-900);
+        margin-block-start: var(--spacing-2);
+
+        & strong {
+            font-size: var(--font-size-xl);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-primary-700);
+        }
+    }
+
+    /* ── Info Box (Mercado Pago / Aviso) ── */
+    & .info-box {
+        display: grid;
+        gap: var(--spacing-3);
+        padding: var(--spacing-4) var(--spacing-5);
+        border-radius: var(--radius-md);
+        font-size: var(--font-size-sm);
+        line-height: var(--line-height-relaxed);
+        margin-block-start: var(--spacing-4);
+
+        &.info-box--mp {
+            background-color: var(--color-secondary-100);
+            border: var(--border-width-thin) solid var(--color-secondary-300);
+            color: var(--color-secondary-800);
+
+            & strong { color: var(--color-secondary-800); }
+        }
+
+        &.info-box--aviso {
+            background-color: #fffbeb;
+            border: var(--border-width-thin) solid var(--color-warning);
+            color: #78350f;
+
+            & strong { color: #92400e; }
+        }
+
+        /* Total a pagar */
+        &.info-box--total {
+            background-color: #fef9ec;
+            border: var(--border-width-base) solid var(--color-primary-300);
+            color: var(--color-primary-800);
+            font-size: var(--font-size-base);
+
+            & strong { color: var(--color-primary-700); }
+            & span#valor-total-display { font-size: var(--font-size-xl); font-weight: var(--font-weight-extrabold); }
+        }
+
+        /* Dados bancários */
+        &.info-box--deposito {
+            background-color: #f0f9ff;
+            border: var(--border-width-thin) solid #7dd3fc;
+            color: #0c4a6e;
+
+            & pre {
+                font-family: var(--font-family-mono, monospace);
+                font-size: var(--font-size-sm);
+                white-space: pre-wrap;
+                word-break: break-word;
+                margin: 0;
+                margin-block-start: var(--spacing-2);
+                background: transparent;
+            }
+        }
+
+        /* PIX */
+        &.info-box--pix {
+            background-color: #f0fdf4;
+            border: var(--border-width-thin) solid #86efac;
+            color: #14532d;
+
+            & .pix-qrcode-wrap {
+                display: grid;
+                gap: var(--spacing-3);
+                justify-items: center;
+                text-align: center;
+                margin-block: var(--spacing-3);
+
+                & img { border-radius: var(--radius-md); border: 2px solid #86efac; }
+                & p { margin: 0; font-size: var(--font-size-sm); }
+                & small { word-break: break-all; font-family: var(--font-family-mono, monospace); font-size: 0.7rem; }
+            }
+        }
+
+        & small {
+            color: inherit;
+            opacity: 0.85;
+        }
+    }
+
+    /* ── Botão pequeno (btn-sm) ── */
+    & .btn-sm {
+        font-size: var(--font-size-xs, 0.75rem);
+        padding: var(--spacing-1) var(--spacing-3);
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+        background-color: var(--color-neutral-100);
+        border: var(--border-width-thin) solid var(--color-border);
+        color: var(--color-text);
+        transition: background-color var(--transition-fast);
+        margin-inline-start: var(--spacing-2);
+
+        &:hover { background-color: var(--color-neutral-200); }
+    }
+
+    /* ── Área de Submissão ── */
+    & .form-inscricao__submit {
+        display: grid;
+        justify-items: stretch;
+        padding-block-start: var(--spacing-2);
+
+        @media (min-width: 640px) {
+            justify-items: end;
+        }
+    }
+}
+

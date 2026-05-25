@@ -150,6 +150,23 @@ acf_add_local_field_group( [
             'wrapper'       => [ 'width' => '30' ],
         ],
         [
+            'key'               => 'field_inscrito_alergia_alimento_desc',
+            'name'              => 'inscrito_alergia_alimento_desc',
+            'label'             => 'Qual alimento?',
+            'type'              => 'text',
+            'placeholder'       => 'Descreva a alergia alimentar',
+            'wrapper'           => [ 'width' => '30' ],
+            'conditional_logic' => [
+                [
+                    [
+                        'field'    => 'field_inscrito_alergia_alimento',
+                        'operator' => '==',
+                        'value'    => 'sim',
+                    ],
+                ],
+            ],
+        ],
+        [
             'key'           => 'field_inscrito_alergia_remedio',
             'name'          => 'inscrito_alergia_remedio',
             'label'         => 'Alergia a Medicamento?',
@@ -157,6 +174,23 @@ acf_add_local_field_group( [
             'choices'       => [ 'nao' => 'Não', 'sim' => 'Sim' ],
             'default_value' => 'nao',
             'wrapper'       => [ 'width' => '30' ],
+        ],
+        [
+            'key'               => 'field_inscrito_alergia_remedio_desc',
+            'name'              => 'inscrito_alergia_remedio_desc',
+            'label'             => 'Qual medicamento?',
+            'type'              => 'text',
+            'placeholder'       => 'Descreva a alergia a medicamento',
+            'wrapper'           => [ 'width' => '30' ],
+            'conditional_logic' => [
+                [
+                    [
+                        'field'    => 'field_inscrito_alergia_remedio',
+                        'operator' => '==',
+                        'value'    => 'sim',
+                    ],
+                ],
+            ],
         ],
         [
             'key'           => 'field_inscrito_transporte',
@@ -192,6 +226,7 @@ acf_add_local_field_group( [
             'type'          => 'select',
             'choices'       => [
                 'deposito' => 'Depósito Bancário',
+                'pix'      => 'PIX',
                 'cartao'   => 'Cartão de Crédito (Mercado Pago)',
             ],
             'allow_null'    => 1,

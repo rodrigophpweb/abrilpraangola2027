@@ -1,0 +1,244 @@
+/* ====================================================
+   COMPONENTE — SITE HEADER
+   CSS Nesting + Grid Layout | Sem Flexbox
+   Breakpoints: lg 1024px (menu desktop)
+   ==================================================== */
+
+/* ── Altura do header como variável global ── */
+:root {
+    --header-height: 182px; /* logo 150px + padding-block 16px × 2 */
+}
+
+/* ────────────────────────────────────────────────────
+   HEADER WRAPPER — fixo, com hide/show no scroll
+   ──────────────────────────────────────────────────── */
+.site-header {
+    position: fixed;
+    inset-block-start: 0;
+    inset-inline: 0;
+    z-index: var(--z-sticky);
+    background-color: var(--color-neutral-900);
+    border-block-end: 1px solid rgba(255, 255, 255, 0.06);
+    transition: transform var(--transition-base),
+                box-shadow var(--transition-base);
+
+    &.is-hidden {
+        transform: translateY(-100%);
+    }
+
+    &.is-scrolled {
+        box-shadow: var(--shadow-xl);
+    }
+
+    & .site-header__inner {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        grid-template-areas: "logo . toggle";
+        align-items: center;
+        gap: var(--spacing-4);
+        padding-block: var(--spacing-4);
+
+        @media (min-width: 1024px) {
+            grid-template-areas: "logo . nav";
+        }
+    }
+
+    /* ────────────────────────────────────────────────
+       LOGOTIPO
+    ──────────────────────────────────────────────────── */
+    & .site-header__logo {
+        grid-area: logo;
+        display: grid;
+        align-items: center;
+        text-decoration: none;
+        outline-offset: 4px;
+
+        & img,
+        & .site-header__logo-img {
+            width: 150px;
+            height: auto;
+            display: block;
+            object-fit: contain;
+            border-radius: var(--radius-sm);
+        }
+
+        & .site-header__logo-fallback {
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-bold);
+            color: var(--color-neutral-0);
+            letter-spacing: var(--letter-spacing-tight);
+            line-height: 1;
+
+            @media (min-width: 768px) {
+                font-size: var(--font-size-xl);
+            }
+        }
+    }
+
+    /* ────────────────────────────────────────────────
+       NAVEGAÇÃO PRINCIPAL (desktop)
+    ──────────────────────────────────────────────────── */
+    & .site-nav {
+        grid-area: nav;
+        display: none;
+
+        @media (min-width: 1024px) {
+            display: grid;
+            justify-content: end;
+        }
+
+        & .site-nav__list {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: max-content;
+            gap: var(--spacing-3);
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            align-items: center;
+        }
+
+        & li {
+            & a {
+                display: grid;
+                place-items: center;
+                padding: var(--spacing-2) var(--spacing-4);
+                color: var(--color-neutral-300);
+                text-decoration: none;
+                font-size: var(--font-size-sm);
+                font-weight: var(--font-weight-medium);
+                border-radius: var(--radius-full);
+                letter-spacing: var(--letter-spacing-wide);
+                text-transform: uppercase;
+                white-space: nowrap;
+                transition: background-color var(--transition-fast),
+                            color var(--transition-fast);
+
+                &:hover,
+                &:focus-visible {
+                    background-color: var(--color-primary-0);
+                    color: var(--color-neutral-0);
+                    outline: none;
+                }
+            }
+
+            &.current-menu-item > a,
+            &.current-page-ancestor > a,
+            &.current-menu-ancestor > a {
+                background-color: var(--color-primary-0);
+                color: var(--color-neutral-0);
+            }
+        }
+    }
+
+    /* ────────────────────────────────────────────────
+       BOTÃO HAMBURGUER (mobile)
+    ──────────────────────────────────────────────────── */
+    & .site-header__toggle {
+        grid-area: toggle;
+        display: grid;
+        gap: 5px;
+        align-items: center;
+        justify-items: center;
+        width: 40px;
+        height: 40px;
+        padding: var(--spacing-2);
+        background: none;
+        border: var(--border-width-thin) solid rgba(255, 255, 255, 0.15);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: border-color var(--transition-fast),
+                    background-color var(--transition-fast);
+
+        &:hover {
+            border-color: var(--color-primary-500);
+            background-color: rgba(229, 114, 10, 0.1);
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--color-primary-400);
+            outline-offset: 2px;
+        }
+
+        @media (min-width: 1024px) {
+            display: none;
+        }
+
+        & .site-header__toggle-bar {
+            display: block;
+            width: 20px;
+            height: 2px;
+            background-color: var(--color-neutral-0);
+            border-radius: var(--radius-full);
+            transition: transform var(--transition-base),
+                        opacity var(--transition-fast),
+                        width var(--transition-fast);
+        }
+
+        &[aria-expanded="true"] {
+            border-color: var(--color-primary-500);
+
+            & .site-header__toggle-bar:nth-child(1) {
+                transform: translateY(7px) rotate(45deg);
+            }
+
+            & .site-header__toggle-bar:nth-child(2) {
+                opacity: 0;
+                width: 0;
+            }
+
+            & .site-header__toggle-bar:nth-child(3) {
+                transform: translateY(-7px) rotate(-45deg);
+            }
+        }
+    }
+}
+
+/* ────────────────────────────────────────────────────
+   MENU MOBILE — Drawer
+   ──────────────────────────────────────────────────── */
+.menu-open {
+    & .site-nav {
+        display: grid;
+        position: fixed;
+        inset-block-start: var(--header-height);
+        inset-inline: 0;
+        background-color: var(--color-neutral-900);
+        border-block-end: 1px solid rgba(255, 255, 255, 0.06);
+        padding: var(--spacing-6) var(--container-padding-x);
+        box-shadow: var(--shadow-xl);
+        z-index: var(--z-dropdown);
+        animation: slideDown var(--transition-base) ease forwards;
+
+        & .site-nav__list {
+            grid-auto-flow: row;
+            grid-auto-columns: 1fr;
+            gap: var(--spacing-2);
+        }
+
+        & li a {
+            padding: var(--spacing-3) var(--spacing-4);
+            font-size: var(--font-size-base);
+            border-radius: var(--radius-md);
+        }
+    }
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ────────────────────────────────────────────────────
+   COMPENSAÇÃO DO HEADER FIXO
+   ──────────────────────────────────────────────────── */
+body {
+    /* Todas as páginas: empurra conteúdo abaixo do header */
+    padding-block-start: var(--header-height);
+}
+
+/* Home page: hero cobre a área do header (full-bleed)
+   O padding é gerido internamente pelo .event-countdown */
+body.home {
+    padding-block-start: 0;
+}

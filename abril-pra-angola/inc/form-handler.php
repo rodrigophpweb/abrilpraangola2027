@@ -20,7 +20,9 @@ function abril_processar_inscricao() {
     $graduacao        = sanitize_text_field( $_POST['graduacao'] ?? '' );
     $camiseta         = sanitize_text_field( $_POST['camiseta'] ?? '' );
     $alergia_alimento = sanitize_text_field( $_POST['alergia_alimento'] ?? 'nao' );
+    $alergia_alimento_desc = sanitize_text_field( $_POST['alergia_alimento_desc'] ?? '' );
     $alergia_remedio  = sanitize_text_field( $_POST['alergia_remedio'] ?? 'nao' );
+    $alergia_remedio_desc  = sanitize_text_field( $_POST['alergia_remedio_desc'] ?? '' );
     $pacote_id        = intval( $_POST['pacote_id'] ?? 0 );
     $forma_pagamento  = sanitize_text_field( $_POST['forma_pagamento'] ?? '' );
     $data_pagamento   = sanitize_text_field( $_POST['data_pagamento'] ?? '' );
@@ -82,20 +84,22 @@ function abril_processar_inscricao() {
     }
 
     // ── Salvar campos via ACF ─────────────────────────────
-    update_field( 'field_inscrito_email',            $email,            $post_id );
-    update_field( 'field_inscrito_celular',          $celular,          $post_id );
-    update_field( 'field_inscrito_associacao',       $associacao,       $post_id );
-    update_field( 'field_inscrito_apelido',          $apelido,          $post_id );
-    update_field( 'field_inscrito_graduacao',        $graduacao,        $post_id );
-    update_field( 'field_inscrito_camiseta',         $camiseta,         $post_id );
-    update_field( 'field_inscrito_alergia_alimento', $alergia_alimento, $post_id );
-    update_field( 'field_inscrito_alergia_remedio',  $alergia_remedio,  $post_id );
-    update_field( 'field_inscrito_pacote_id',        $pacote_id,        $post_id );
-    update_field( 'field_inscrito_forma_pagamento',  $forma_pagamento,  $post_id );
-    update_field( 'field_inscrito_data_pagamento',   $data_pagamento,   $post_id );
-    update_field( 'field_inscrito_transporte',       $transporte,       $post_id );
-    update_field( 'field_inscrito_status',           'pendente',        $post_id );
-    update_field( 'field_inscrito_user_id',          $user_id,          $post_id );
+    update_field( 'field_inscrito_email',                    $email,                    $post_id );
+    update_field( 'field_inscrito_celular',                  $celular,                  $post_id );
+    update_field( 'field_inscrito_associacao',               $associacao,               $post_id );
+    update_field( 'field_inscrito_apelido',                  $apelido,                  $post_id );
+    update_field( 'field_inscrito_graduacao',                $graduacao,                $post_id );
+    update_field( 'field_inscrito_camiseta',                 $camiseta,                 $post_id );
+    update_field( 'field_inscrito_alergia_alimento',         $alergia_alimento,         $post_id );
+    update_field( 'field_inscrito_alergia_alimento_desc',    $alergia_alimento_desc,    $post_id );
+    update_field( 'field_inscrito_alergia_remedio',          $alergia_remedio,          $post_id );
+    update_field( 'field_inscrito_alergia_remedio_desc',     $alergia_remedio_desc,     $post_id );
+    update_field( 'field_inscrito_pacote_id',                $pacote_id,                $post_id );
+    update_field( 'field_inscrito_forma_pagamento',          $forma_pagamento,          $post_id );
+    update_field( 'field_inscrito_data_pagamento',           $data_pagamento,           $post_id );
+    update_field( 'field_inscrito_transporte',               $transporte,               $post_id );
+    update_field( 'field_inscrito_status',                   'pendente',                $post_id );
+    update_field( 'field_inscrito_user_id',                  $user_id,                  $post_id );
 
     update_post_meta( $post_id, '_status_anterior_inscrito', 'pendente' );
 

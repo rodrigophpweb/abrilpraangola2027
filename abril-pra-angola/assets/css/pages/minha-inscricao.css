@@ -1,6 +1,6 @@
 /* ====================================================
-   PÁGINA — INSCRIÇÃO
+   PÁGINA — MINHA INSCRIÇÃO (Área Pessoal)
    Importa os componentes necessários para esta página.
    ==================================================== */
 
-@import '../components/form-subscribe.css';
+@import '../components/card-subscribe.css';

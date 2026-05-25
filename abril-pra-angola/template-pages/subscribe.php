@@ -1,7 +1,7 @@
 <?php
 /**
  * Template Name: Inscrição
- * Página de inscrição do evento com login social e formulário completo.
+ * Página de inscrição do evento com formulário completo.
  */
 get_header();
 
@@ -44,33 +44,10 @@ $pacotes = get_posts( [
             <!-- Após sucesso mostra apenas a mensagem, sem o formulário -->
         <?php else : ?>
 
-            <?php if ( ! is_user_logged_in() ) : ?>
-            <!-- ── Login Social ──────────────────────────────── -->
-            <section class="login-social">
-                <h2>Entre com a sua conta para agilizar o preenchimento</h2>
-                <div class="login-social__botoes">
-                    <?php
-                    // Nextend Social Login gera estes links automaticamente.
-                    // Certifique-se de que o plugin está instalado e configurado.
-                    if ( function_exists( 'NSL_Provider_Manager' ) ) :
-                        do_action( 'wordpress_social_login' );
-                    else : ?>
-                        <p class="aviso-plugin">
-                            <em>Para habilitar o login com Google e Facebook, instale o plugin
-                            <a href="https://wordpress.org/plugins/nextend-social-login/" target="_blank">Nextend Social Login</a>.</em>
-                        </p>
-                    <?php endif; ?>
-                </div>
-                <p class="login-social__ou"><span>ou preencha o formulário abaixo</span></p>
-            </section>
-            <?php else :
-                $current_user = wp_get_current_user();
+            <?php
+            // Pré-preenchimento se o utilizador estiver autenticado
+            $current_user = is_user_logged_in() ? wp_get_current_user() : null;
             ?>
-            <div class="utilizador-logado">
-                👋 Olá, <strong><?php echo esc_html( $current_user->display_name ); ?></strong>!
-                Seus dados serão vinculados a esta inscrição.
-            </div>
-            <?php endif; ?>
 
             <!-- ── Formulário de Inscrição ───────────────────── -->
             <form
@@ -155,12 +132,22 @@ $pacotes = get_posts( [
                                 <option value="sim">Sim</option>
                             </select>
                         </div>
+                        <div id="alergia_alimento_wrap" style="display:none;">
+                            <label for="alergia_alimento_desc">Qual alimento? *</label>
+                            <input type="text" id="alergia_alimento_desc" name="alergia_alimento_desc"
+                                   placeholder="Ex: Amendoim, Glúten, Lactose..." />
+                        </div>
                         <div>
                             <label for="alergia_remedio">Alergia a algum medicamento? *</label>
                             <select id="alergia_remedio" name="alergia_remedio" required>
                                 <option value="nao">Não</option>
                                 <option value="sim">Sim</option>
                             </select>
+                        </div>
+                        <div id="alergia_remedio_wrap" style="display:none;">
+                            <label for="alergia_remedio_desc">Qual medicamento? *</label>
+                            <input type="text" id="alergia_remedio_desc" name="alergia_remedio_desc"
+                                   placeholder="Ex: Dipirona, Penicilina..." />
                         </div>
                     </div>
                 </fieldset>
@@ -195,8 +182,24 @@ $pacotes = get_posts( [
                         <select id="forma_pagamento" name="forma_pagamento" required>
                             <option value="">— Selecione —</option>
                             <option value="deposito">Depósito Bancário</option>
+                            <option value="pix">PIX</option>
                             <option value="cartao">Cartão de Crédito (Mercado Pago)</option>
                         </select>
+                    </div>
+
+                    <!-- Valor total (exibido quando deposito ou pix for selecionado) -->
+                    <div id="box-valor-total" class="info-box info-box--total" style="display:none;">
+                        💰 <strong>Total a pagar: <span id="valor-total-display">R$ 0,00</span></strong>
+                        <span id="valor-total-transporte-msg" style="display:none;"> <small>(inclui R$ 70,00 do transporte)</small></span>
+                    </div>
+
+                    <!-- Dados Bancários (depósito) -->
+                    <?php
+                    $dados_bancarios = function_exists( 'get_field' ) ? get_field( 'dados_bancarios', 'option' ) : '';
+                    ?>
+                    <div id="box-deposito" class="info-box info-box--deposito" style="display:none;">
+                        🏦 <strong>Dados para Depósito Bancário:</strong><br>
+                        <pre><?php echo esc_html( $dados_bancarios ?: 'Dados bancários não configurados. Entre em contato.' ); ?></pre>
                     </div>
 
                     <!-- Link do Mercado Pago (aparece se cartão for selecionado) -->
@@ -205,6 +208,22 @@ $pacotes = get_posts( [
                         <a id="btn-mercado-pago" href="#" target="_blank" class="btn btn-mercado-pago">
                             Pagar com Cartão de Crédito →
                         </a>
+                        <p><small>Após o pagamento, envie o comprovante através do link que receberá por e-mail.</small></p>
+                    </div>
+
+                    <!-- PIX QR Code -->
+                    <div id="box-pix" class="info-box info-box--pix" style="display:none;">
+                        <strong>🔑 Pagamento via PIX:</strong><br>
+                        <div class="pix-qrcode-wrap">
+                            <img id="pix-qrcode-img" src="" alt="QR Code PIX" style="display:none; max-width:200px; margin: 12px auto; display:block;" />
+                            <p><strong>Chave PIX:</strong> <span id="pix-chave-display"></span>
+                            <button type="button" id="pix-copiar-chave" class="btn btn-sm">📋 Copiar chave</button></p>
+                            <p id="pix-copia-cola-wrap" style="display:none;">
+                                <strong>PIX Copia e Cola:</strong><br>
+                                <small id="pix-payload-display" style="word-break: break-all;"></small>
+                                <button type="button" id="pix-copiar-payload" class="btn btn-sm">📋 Copiar código</button>
+                            </p>
+                        </div>
                         <p><small>Após o pagamento, envie o comprovante através do link que receberá por e-mail.</small></p>
                     </div>
 
@@ -251,50 +270,5 @@ $pacotes = get_posts( [
 
 </main>
 
-<script>
-(function () {
-    const selectPacote    = document.getElementById('pacote_id');
-    const selectPagamento = document.getElementById('forma_pagamento');
-    const boxPreco        = document.getElementById('pacote-preco');
-    const valorPreco      = document.getElementById('pacote-preco-valor');
-    const boxMP           = document.getElementById('link-mercado-pago');
-    const btnMP           = document.getElementById('btn-mercado-pago');
-
-    function getOpcaoAtual() {
-        return selectPacote.options[selectPacote.selectedIndex];
-    }
-
-    function atualizarPreco() {
-        const opt   = getOpcaoAtual();
-        const preco = parseFloat( opt?.dataset?.preco );
-
-        if ( opt?.value && ! isNaN(preco) && preco > 0 ) {
-            valorPreco.textContent = 'R$ ' + preco.toLocaleString('pt-BR', { minimumFractionDigits: 2 });
-            boxPreco.style.display = 'block';
-        } else {
-            boxPreco.style.display = 'none';
-        }
-    }
-
-    function atualizarLinkMP() {
-        const opt    = getOpcaoAtual();
-        const linkMp = opt?.dataset?.linkMp;
-
-        if ( selectPagamento.value === 'cartao' && linkMp && linkMp.startsWith('http') ) {
-            btnMP.href = linkMp;
-            boxMP.style.display = 'block';
-        } else {
-            boxMP.style.display = 'none';
-        }
-    }
-
-    selectPacote?.addEventListener('change', function() {
-        atualizarPreco();
-        atualizarLinkMP();
-    });
-
-    selectPagamento?.addEventListener('change', atualizarLinkMP);
-})();
-</script>
 
 <?php get_footer(); ?>

@@ -1,7 +1,7 @@
 <?php
 /**
- * Admin Columns & Filters — Inscritos
- * Adiciona coluna de status e filtro na listagem do CPT Inscrito.
+ * Admin Columns, Filters & Quick Edit — Inscritos
+ * Adiciona coluna de status, filtro e edição rápida na listagem do CPT Inscrito.
  */
 
 // ─────────────────────────────────────────────────────────────
@@ -52,6 +52,11 @@ add_action( 'manage_inscrito_posts_custom_column', function ( $column, $post_id 
                 $item['cor'],
                 $item['icone'],
                 $item['label']
+            );
+            // Dados ocultos para o Quick Edit JS ler
+            printf(
+                '<span class="hidden abril-qe-data" data-status="%s"></span>',
+                esc_attr( $status )
             );
             break;
     }
@@ -124,4 +129,98 @@ add_action( 'admin_head', function () {
     </style>
     <?php
 } );
+
+
+// ─────────────────────────────────────────────────────────────
+// 6. QUICK EDIT — Campos de Status e Pacote
+// ─────────────────────────────────────────────────────────────
+add_action( 'quick_edit_custom_box', function ( $column_name, $post_type ) {
+    if ( $post_type !== 'inscrito' || $column_name !== 'inscrito_status' ) return;
+    ?>
+    <fieldset class="inline-edit-col-right">
+        <div class="inline-edit-col">
+            <?php wp_nonce_field( 'abril_quick_edit_inscrito', 'abril_qe_nonce' ); ?>
+
+            <label>
+                <span class="title">📌 Status</span>
+                <select name="abril_qe_status" id="abril-qe-status">
+                    <option value="pendente">⏳ Pendente</option>
+                    <option value="confirmado">✅ Confirmado</option>
+                    <option value="cancelado">❌ Cancelado</option>
+                </select>
+            </label>
+        </div>
+    </fieldset>
+    <?php
+}, 10, 2 );
+
+
+// ─────────────────────────────────────────────────────────────
+// 7. QUICK EDIT — JS para pré-preencher os campos ao abrir
+// ─────────────────────────────────────────────────────────────
+add_action( 'admin_footer-edit.php', function () {
+    $screen = get_current_screen();
+    if ( ! $screen || $screen->post_type !== 'inscrito' ) return;
+    ?>
+    <script>
+    ( function ( $ ) {
+        var wpInlineEdit = inlineEditPost.edit;
+
+        inlineEditPost.edit = function ( id ) {
+            // Chamar o comportamento original primeiro
+            wpInlineEdit.apply( this, arguments );
+
+            var postId = ( typeof id === 'object' ) ? this.getId( id ) : id;
+            var $row   = $( '#post-' + postId );
+            var $data  = $row.find( '.abril-qe-data' );
+
+            if ( ! $data.length ) return;
+
+            var status   = $data.data( 'status' ) || 'pendente';
+
+            // Pré-preencher o select da edição rápida
+            $( '#abril-qe-status' ).val( status );
+        };
+    } )( jQuery );
+    </script>
+    <?php
+} );
+
+
+// ─────────────────────────────────────────────────────────────
+// 8. QUICK EDIT — Salvar os campos ao submeter
+// ─────────────────────────────────────────────────────────────
+add_action( 'save_post_inscrito', function ( $post_id ) {
+    // Ignorar autosave e revisões
+    if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
+    if ( wp_is_post_revision( $post_id ) ) return;
+
+    // Verificar se viemos de um Quick Edit (nonce presente)
+    if ( ! isset( $_POST['abril_qe_nonce'] ) ) return;
+    if ( ! wp_verify_nonce( $_POST['abril_qe_nonce'], 'abril_quick_edit_inscrito' ) ) return;
+    if ( ! current_user_can( 'edit_post', $post_id ) ) return;
+
+    // ── Status ──────────────────────────────────────────────
+    if ( isset( $_POST['abril_qe_status'] ) ) {
+        $status_novo      = sanitize_text_field( $_POST['abril_qe_status'] );
+        $status_permitidos = [ 'pendente', 'confirmado', 'cancelado' ];
+
+        if ( in_array( $status_novo, $status_permitidos, true ) ) {
+            $status_anterior = get_post_meta( $post_id, '_status_anterior_inscrito', true );
+
+            update_post_meta( $post_id, 'inscrito_status', $status_novo );
+
+            // Disparar e-mail de confirmação se mudou para "confirmado"
+            if ( $status_anterior !== 'confirmado' && $status_novo === 'confirmado' ) {
+                if ( function_exists( 'abril_enviar_email_confirmacao' ) ) {
+                    abril_enviar_email_confirmacao( $post_id );
+                }
+            }
+
+            update_post_meta( $post_id, '_status_anterior_inscrito', $status_novo );
+        }
+    }
+
+} );
+
 

@@ -1,3 +1,9 @@
-@import "../variables.css"
-@import "../components/header.css";
-@import "../components/footer.css";
+/* ====================================================
+   PÁGINA — HOME (Front Page)
+   Importa os componentes necessários para esta página.
+   ==================================================== */
+
+@import '../components/header.css';
+@import '../components/hero-banner.css';
+@import '../components/faq.css';
+@import '../components/footer.css';

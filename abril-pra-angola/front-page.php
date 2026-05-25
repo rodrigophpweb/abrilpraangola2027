@@ -1,6 +1,6 @@
 <?php
     get_header();
-    get_template_part( 'template-parts/hero', 'banner' ); // template-parts/file-name.php
+    get_template_part( 'template-parts/hero', 'banner' );
 
 ?>
 
@@ -12,5 +12,8 @@
     <?php endwhile; endif; ?>
 </main>
 
-<?php get_footer(); ?>
+<?php
+    get_template_part( 'template-parts/faq');
+    get_footer();
+?>
 
