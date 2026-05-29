@@ -13,6 +13,10 @@ $pacotes = get_posts( [
     'orderby'     => 'menu_order',
     'order'       => 'ASC',
 ] );
+
+// Pré-seleção de pacote via URL (?pkg_id=ID — vindo da seção de ingressos)
+// Usamos pkg_id e não 'pacote' para evitar conflito com o CPT 'pacote' do WordPress
+$pacote_preselect = intval( get_query_var( 'pkg_id', $_GET['pkg_id'] ?? 0 ) );
 ?>
 
 <main id="main" class="page-inscricao">
@@ -161,17 +165,20 @@ $pacotes = get_posts( [
                         <select id="pacote_id" name="pacote_id" required>
                             <option value="">— Selecione um pacote —</option>
                             <?php foreach ( $pacotes as $pacote ) :
-                                $preco   = get_field( 'pacote_preco',   $pacote->ID );
-                                $link_mp = get_field( 'pacote_link_mp', $pacote->ID );
+                                $preco_avista = get_field( 'pacote_preco_avista', $pacote->ID );
+                                $preco_cartao = get_field( 'pacote_preco_cartao', $pacote->ID );
+                                $link_mp      = get_field( 'pacote_link_mp',      $pacote->ID );
                             ?>
                                 <option value="<?php echo esc_attr( $pacote->ID ); ?>"
-                                        data-preco="<?php echo esc_attr( $preco ); ?>"
-                                        data-link-mp="<?php echo esc_attr( $link_mp ); ?>">
+                                        data-preco-avista="<?php echo esc_attr( $preco_avista ); ?>"
+                                        data-preco-cartao="<?php echo esc_attr( $preco_cartao ); ?>"
+                                        data-link-mp="<?php echo esc_attr( $link_mp ); ?>"
+                                        <?php selected( $pacote_preselect, $pacote->ID ); ?>>
                                     <?php echo esc_html( $pacote->post_title ); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
-                        <!-- Preço dinâmico -->
+                        <!-- Preço dinâmico (à vista) -->
                         <div id="pacote-preco" class="pacote-preco" style="display:none;">
                             Valor do pacote: <strong id="pacote-preco-valor"></strong>
                         </div>
@@ -187,11 +194,15 @@ $pacotes = get_posts( [
                         </select>
                     </div>
 
-                    <!-- Valor total (exibido quando deposito ou pix for selecionado) -->
+                    <!-- Valor total (exibido quando pacote + pagamento selecionados) -->
                     <div id="box-valor-total" class="info-box info-box--total" style="display:none;">
                         💰 <strong>Total a pagar: <span id="valor-total-display">R$ 0,00</span></strong>
                         <span id="valor-total-transporte-msg" style="display:none;"> <small>(inclui R$ 70,00 do transporte)</small></span>
+                        <span id="valor-total-cartao-msg" style="display:none;"> <small>— <strong>pode parcelar em até 2x</strong> no cartão de crédito</small></span>
                     </div>
+
+                    <!-- Campo hidden com o valor total calculado (enviado ao servidor) -->
+                    <input type="hidden" id="valor_total_hidden" name="valor_total" value="0" />
 
                     <!-- Dados Bancários (depósito) -->
                     <?php
@@ -204,10 +215,11 @@ $pacotes = get_posts( [
 
                     <!-- Link do Mercado Pago (aparece se cartão for selecionado) -->
                     <div id="link-mercado-pago" class="info-box info-box--mp" style="display:none;">
-                        💳 <strong>Pagamento via Mercado Pago:</strong><br>
+                        💳 <strong>Pagamento via Cartão de Crédito (Mercado Pago):</strong><br>
                         <a id="btn-mercado-pago" href="#" target="_blank" class="btn btn-mercado-pago">
                             Pagar com Cartão de Crédito →
                         </a>
+                        <p><small>✨ Você tem a opção de <strong>parcelar em até 2x</strong> diretamente no link de pagamento.</small></p>
                         <p><small>Após o pagamento, envie o comprovante através do link que receberá por e-mail.</small></p>
                     </div>
 

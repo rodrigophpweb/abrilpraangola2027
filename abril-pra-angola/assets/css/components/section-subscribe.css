@@ -1,0 +1,86 @@
+/* ====================================================
+   COMPONENTE — SECTION SUBSCRIBE (CTA Inscreva-se)
+   CSS Nesting + Grid Layout | Sem Flexbox
+   Breakpoints: md 768px | sm 480px
+   Base: 16px = 1rem
+   ==================================================== */
+
+.section-subscribe {
+    background-color: var(--color-neutral-900); /* #000 */
+    padding-block: var(--spacing-16);            /* 4rem / 64px */
+    color: var(--color-neutral-0);
+    font-family: var(--font-family-base);
+    text-align: center;
+
+    /* ── Inner grid ── */
+    & .section-subscribe__inner {
+        display: grid;
+        grid-template-columns: 1fr;
+        justify-items: start;
+        gap: var(--spacing-8);                   /* 2rem / 32px */
+    }
+
+    /* ── h2 — Título da Seção ── */
+    & h2 {
+        color: var(--color-primary-0);           /* #FAB206 */
+        font-size: var(--font-size-4xl);         /* 2.25rem / 36px */
+        font-weight: var(--font-weight-bold);
+        line-height: var(--line-height-tight);
+        margin: 0;
+
+        /* Linha decorativa — branca, centralizada (padrão about-general) */
+        &::after {
+            content: '';
+            display: block;
+            width: 3rem;                         /* 48px */
+            height: 0.25rem;                     /* 4px */
+            background-color: var(--color-neutral-0);
+            border-radius: var(--radius-full);
+            margin-block-start: var(--spacing-4); /* 1rem / 16px */
+        }
+    }
+
+    /* ── p — Descrição da Seção ── */
+    & p {
+        color: var(--color-neutral-0);
+        font-size: var(--font-size-md);          /* 1.125rem / 18px */
+        line-height: var(--line-height-relaxed);
+        margin: 0;
+    }
+
+    /* ── Botão CTA ── segue padrão .btn do projeto ── */
+    & .btn {
+        justify-self: center;
+    }
+
+    /* ── Responsivo: tablet (≤ 768px) ── */
+    @media (max-width: 768px) {
+        padding-block: var(--spacing-10);        /* 2.5rem / 40px */
+
+        & h2 {
+            font-size: var(--font-size-2xl);     /* 1.875rem / 30px */
+        }
+
+        & p {
+            font-size: var(--font-size-base);    /* 1rem / 16px */
+        }
+
+        & .section-subscribe__inner {
+            gap: var(--spacing-6);               /* 1.5rem / 24px */
+        }
+
+        & .btn {
+            width: 100%;
+            text-align: center;
+        }
+    }
+
+    /* ── Responsivo: extra small (≤ 480px) ── */
+    @media (max-width: 480px) {
+        padding-block: var(--spacing-8);         /* 2rem / 32px */
+
+        & h2 {
+            font-size: var(--font-size-xl);      /* 1.5rem / 24px */
+        }
+    }
+}

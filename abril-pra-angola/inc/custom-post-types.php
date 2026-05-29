@@ -338,3 +338,40 @@ function abril_register_cpt_fotos_evento() {
 add_action( 'init', 'abril_register_cpt_fotos_evento' );
 
 
+// ─────────────────────────────────────────────
+// 8. FAQ (Perguntas Frequentes)
+// ─────────────────────────────────────────────
+function abril_register_cpt_faq() {
+    $labels = [
+        'name'               => __( 'FAQ', 'abril-pra-angola' ),
+        'singular_name'      => __( 'Pergunta FAQ', 'abril-pra-angola' ),
+        'menu_name'          => __( 'FAQ', 'abril-pra-angola' ),
+        'add_new'            => __( 'Adicionar Novo', 'abril-pra-angola' ),
+        'add_new_item'       => __( 'Adicionar Nova Pergunta', 'abril-pra-angola' ),
+        'edit_item'          => __( 'Editar Pergunta', 'abril-pra-angola' ),
+        'new_item'           => __( 'Nova Pergunta', 'abril-pra-angola' ),
+        'view_item'          => __( 'Ver Pergunta', 'abril-pra-angola' ),
+        'search_items'       => __( 'Buscar Perguntas', 'abril-pra-angola' ),
+        'not_found'          => __( 'Nenhuma pergunta encontrada', 'abril-pra-angola' ),
+        'not_found_in_trash' => __( 'Nenhuma pergunta na lixeira', 'abril-pra-angola' ),
+        'all_items'          => __( 'Todas as Perguntas', 'abril-pra-angola' ),
+    ];
+
+    $args = [
+        'labels'          => $labels,
+        'public'          => true,
+        'show_ui'         => true,
+        'show_in_menu'    => true,
+        'show_in_rest'    => true,   // Habilita Gutenberg e exposição na REST API (rastreável por bots)
+        'menu_icon'       => 'dashicons-editor-help',
+        'supports'        => [ 'title', 'editor', 'page-attributes' ], // title = Pergunta | editor = Resposta | page-attributes = Ordem
+        'has_archive'     => false,
+        'rewrite'         => [ 'slug' => 'faq' ],
+        'capability_type' => 'post',
+    ];
+
+    register_post_type( 'faq', $args );
+}
+add_action( 'init', 'abril_register_cpt_faq' );
+
+

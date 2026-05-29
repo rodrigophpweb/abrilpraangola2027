@@ -1,0 +1,124 @@
+/* ====================================================
+   SEÇÃO LOCALIZAÇÃO DO EVENTO
+   Projeto: Abril pra Angola
+   Layout: CSS Grid exclusivamente
+   Unidade: rem (base 16px = 1rem)
+   ==================================================== */
+
+/* ── Seção Principal ───────────────────────────────── */
+.section-location {
+    padding-block-start: var(--section-padding-y);
+    background-color: var(--color-primary-0);
+    overflow: hidden;
+}
+
+.section-location > .container {
+    display: grid;
+    gap: var(--spacing-8);
+    padding-block-end: var(--spacing-12);
+}
+
+/* ── Cabeçalho ─────────────────────────────────────── */
+.section-location__header {
+    display: grid;
+    gap: var(--spacing-6);
+}
+
+/* ── Título H2 ──────────────────────────────────────── */
+.section-location__title {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-neutral-900);
+    line-height: var(--line-height-tight);
+}
+
+/* Linha decorativa abaixo do título — padrão do projeto */
+.section-location__title::after {
+    content: '';
+    display: block;
+    width: 3rem;
+    height: 0.25rem;
+    background-color: var(--color-neutral-0);
+    border-radius: var(--radius-full);
+    margin-block-start: var(--spacing-4);
+    margin-inline: 0;
+}
+
+/* ── Endereço ───────────────────────────────────────── */
+.section-location__address {
+    display: grid;
+    gap: var(--spacing-2);
+    font-style: normal;
+}
+
+/* Nome do local (ex: Alvorada Camping) */
+.section-location__venue {
+    display: block;
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-neutral-0);
+    line-height: var(--line-height-snug);
+}
+
+/* Endereço completo */
+.section-location__street {
+    display: block;
+    font-size: var(--font-size-base);
+    color: var(--color-neutral-900);
+    line-height: var(--line-height-relaxed);
+}
+
+/* ── Mapa Google Maps — largura total da seção ──────── */
+.section-location__map {
+    width: 100%;
+    line-height: 0; /* remove gap inline */
+}
+
+.section-location__iframe {
+    display: block;
+    width: 100%;
+    height: 18.75rem; /* 300px ÷ 16 = 18.75rem */
+    border: 0;
+}
+
+/* ── Responsivo: Tablet (≥ 768px) ──────────────────── */
+@media (min-width: 48rem) {
+    .section-location__title {
+        font-size: var(--font-size-3xl);
+    }
+
+    .section-location__venue {
+        font-size: var(--font-size-2xl);
+    }
+
+    .section-location__street {
+        font-size: var(--font-size-md);
+    }
+
+    .section-location__iframe {
+        height: 25rem; /* 400px ÷ 16 = 25rem */
+    }
+}
+
+/* ── Responsivo: Desktop (≥ 1024px) ────────────────── */
+@media (min-width: 64rem) {
+    .section-location__title {
+        font-size: var(--font-size-4xl);
+    }
+
+    .section-location__venue {
+        font-size: var(--font-size-3xl);
+    }
+
+    .section-location__iframe {
+        height: 31.25rem; /* 500px ÷ 16 = 31.25rem */
+    }
+}
+
+/* ── Responsivo: Wide (≥ 1280px) ───────────────────── */
+@media (min-width: 80rem) {
+    .section-location__iframe {
+        height: 37.5rem; /* 600px ÷ 16 = 37.5rem */
+    }
+}
+

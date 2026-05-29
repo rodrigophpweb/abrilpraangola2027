@@ -76,6 +76,55 @@ function abril_enqueue_styles_and_scripts() {
         $version
     );
 
+    // FAQ
+    wp_enqueue_style(
+        'abril-faq',
+        $components_uri . 'faq.css',
+        [ 'abril-variables' ],
+        $version
+    );
+
+    // Patrocinadores — Carousel
+    wp_enqueue_style(
+        'abril-sponsors',
+        $components_uri . 'section-sponsors.css',
+        [ 'abril-variables' ],
+        $version
+    );
+
+    // Oficineiros — Grade de cards
+    wp_enqueue_style(
+        'abril-speakers',
+        $components_uri . 'section-speakers.css',
+        [ 'abril-variables' ],
+        $version
+    );
+
+    // Seção Ingressos — cards de pacotes na home
+    wp_enqueue_style(
+        'abril-section-tickets',
+        $components_uri . 'section-tickets.css',
+        [ 'abril-variables', 'abril-buttons' ],
+        $version
+    );
+
+    // Seção Inscreva-se — CTA da home
+    wp_enqueue_style(
+        'abril-section-subscribe',
+        $components_uri . 'section-subscribe.css',
+        [ 'abril-variables', 'abril-buttons' ],
+        $version
+    );
+
+    // Seção Localização — mapa e endereço do evento
+    wp_enqueue_style(
+        'abril-section-location',
+        $components_uri . 'section-location.css',
+        [ 'abril-variables' ],
+        $version
+    );
+
+
     // ─────────────────────────────────────────────────────────
     // 4. CSS específico por página / template
     // ─────────────────────────────────────────────────────────

@@ -165,6 +165,7 @@
     const boxMP           = document.getElementById( 'link-mercado-pago' );
     const btnMP           = document.getElementById( 'btn-mercado-pago' );
     const checkTransporte = document.querySelector( 'input[name="transporte"]' );
+    const hiddenValorTotal = document.getElementById( 'valor_total_hidden' );
 
     // Alergia
     const selAlimento     = document.getElementById( 'alergia_alimento' );
@@ -187,6 +188,7 @@
     const boxValorTotal         = document.getElementById( 'box-valor-total' );
     const valorTotalDisplay     = document.getElementById( 'valor-total-display' );
     const valorTotalTranspMsg   = document.getElementById( 'valor-total-transporte-msg' );
+    const valorTotalCartaoMsg   = document.getElementById( 'valor-total-cartao-msg' );
 
     // Deposito
     const boxDeposito = document.getElementById( 'box-deposito' );
@@ -231,9 +233,22 @@
     }
 
     // ── Helpers de Preço ─────────────────────────────
-    function getPrecoBase() {
+    function getPrecoAvista() {
         const opt = selectPacote.options[ selectPacote.selectedIndex ];
-        return parseFloat( opt?.dataset?.preco ) || 0;
+        return parseFloat( opt?.dataset?.precoAvista ) || 0;
+    }
+
+    function getPrecoCartao() {
+        const opt = selectPacote.options[ selectPacote.selectedIndex ];
+        return parseFloat( opt?.dataset?.precoCartao ) || 0;
+    }
+
+    function isCartao() {
+        return selectPagamento.value === 'cartao';
+    }
+
+    function getPrecoBase() {
+        return isCartao() ? getPrecoCartao() : getPrecoAvista();
     }
 
     function getTransporte() {
@@ -292,10 +307,11 @@
     }
 
     function atualizarPreco() {
-        const preco = getPrecoBase();
-        const opt   = getOpcaoAtual();
-        if ( opt?.value && preco > 0 ) {
-            valorPreco.textContent = formatBRL( preco );
+        const opt        = getOpcaoAtual();
+        const precoBase  = getPrecoBase();
+        if ( opt?.value && precoBase > 0 ) {
+            const label = isCartao() ? 'no cartão' : 'à vista';
+            valorPreco.textContent = formatBRL( precoBase ) + ' (' + label + ')';
             boxPreco.style.display = 'block';
         } else {
             boxPreco.style.display = 'none';
@@ -310,6 +326,28 @@
             boxMP.style.display = 'block';
         } else {
             boxMP.style.display = 'none';
+        }
+    }
+
+    function atualizarValorTotal() {
+        const pagamento = selectPagamento.value;
+        const preco     = getPrecoBase();
+        const transp    = getTransporte();
+        const total     = preco + transp;
+        const cartao    = isCartao();
+
+        // Exibir total quando houver pacote e forma de pagamento selecionados
+        if ( pagamento && preco > 0 ) {
+            if ( valorTotalDisplay )   valorTotalDisplay.textContent = formatBRL( total );
+            if ( valorTotalTranspMsg ) valorTotalTranspMsg.style.display = transp > 0 ? 'inline' : 'none';
+            if ( valorTotalCartaoMsg ) valorTotalCartaoMsg.style.display = cartao ? 'inline' : 'none';
+            if ( boxValorTotal )       boxValorTotal.style.display = 'block';
+
+            // Atualiza campo hidden para envio ao servidor
+            if ( hiddenValorTotal ) hiddenValorTotal.value = total.toFixed( 2 );
+        } else {
+            if ( boxValorTotal ) boxValorTotal.style.display = 'none';
+            if ( hiddenValorTotal ) hiddenValorTotal.value = '0';
         }
     }
 
@@ -352,21 +390,6 @@
         }
     }
 
-    function atualizarValorTotal() {
-        const pagamento = selectPagamento.value;
-        const preco     = getPrecoBase();
-        const transp    = getTransporte();
-        const total     = preco + transp;
-
-        // Exibir total só quando for depósito ou pix e houver pacote selecionado
-        if ( ( pagamento === 'deposito' || pagamento === 'pix' ) && preco > 0 ) {
-            if ( valorTotalDisplay ) valorTotalDisplay.textContent = formatBRL( total );
-            if ( valorTotalTranspMsg ) valorTotalTranspMsg.style.display = transp > 0 ? 'inline' : 'none';
-            if ( boxValorTotal ) boxValorTotal.style.display = 'block';
-        } else {
-            if ( boxValorTotal ) boxValorTotal.style.display = 'none';
-        }
-    }
 
     function atualizarTudo() {
         atualizarPreco();
@@ -403,4 +426,121 @@
         checkTransporte.addEventListener( 'change', atualizarTudo );
     }
 
+    // ── Inicialização ─────────────────────────────────
+    // Atualiza a UI ao carregar a página caso haja pacote
+    // pré-selecionado (ex: vindo de ?pacote=ID da seção de ingressos)
+    if ( selectPacote.value ) {
+        atualizarTudo();
+    }
+
 } )();
+
+
+/* ────────────────────────────────────────────────────
+   CAROUSEL DE PATROCINADORES
+   Navegação por setas e bullets com acessibilidade.
+   4 patrocinadores por página.
+   Setas e paginador visíveis apenas quando > 4 sponsors.
+──────────────────────────────────────────────────── */
+( function () {
+    'use strict';
+
+    const carousel = document.querySelector( '.sponsors-carousel' );
+    if ( ! carousel ) return;
+
+    const track      = carousel.querySelector( '.sponsors-carousel__track' );
+    const slides     = Array.from( carousel.querySelectorAll( '.sponsors-carousel__slide' ) );
+    const btnPrev    = carousel.querySelector( '.sponsors-carousel__btn--prev' );
+    const btnNext    = carousel.querySelector( '.sponsors-carousel__btn--next' );
+    const container  = carousel.parentElement; // .container
+    const nav        = container ? container.querySelector( '.sponsors-carousel__nav' ) : null;
+    const bullets    = nav ? Array.from( nav.querySelectorAll( '.sponsors-carousel__bullet' ) ) : [];
+    const totalPages = slides.length;
+
+    // Nenhuma navegação necessária com 1 página
+    if ( totalPages <= 1 ) return;
+
+    let currentPage = 0; // índice 0-based
+
+    // ── Mover para uma página específica ──────────────
+    function goToPage( page ) {
+        // Limita ao intervalo válido
+        page = Math.max( 0, Math.min( page, totalPages - 1 ) );
+        currentPage = page;
+
+        // Desloca o track via translateX
+        track.style.transform = 'translateX( -' + ( page * 100 ) + '% )';
+
+        // ── Atualiza slides ────────────────────────────
+        slides.forEach( function ( slide, i ) {
+            const isActive = i === page;
+            slide.classList.toggle( 'is-active', isActive );
+            slide.setAttribute( 'aria-hidden', isActive ? 'false' : 'true' );
+        } );
+
+        // ── Atualiza bullets ───────────────────────────
+        bullets.forEach( function ( bullet, i ) {
+            const isActive = i === page;
+            bullet.classList.toggle( 'is-active', isActive );
+            bullet.setAttribute( 'aria-current', isActive ? 'true' : 'false' );
+        } );
+
+        // ── Atualiza setas ─────────────────────────────
+        if ( btnPrev ) {
+            btnPrev.disabled = page === 0;
+            btnPrev.classList.toggle( 'is-disabled', page === 0 );
+        }
+        if ( btnNext ) {
+            btnNext.disabled = page === totalPages - 1;
+            btnNext.classList.toggle( 'is-disabled', page === totalPages - 1 );
+        }
+    }
+
+    // ── Listeners das setas ───────────────────────────
+    if ( btnPrev ) {
+        btnPrev.addEventListener( 'click', function () {
+            goToPage( currentPage - 1 );
+        } );
+    }
+
+    if ( btnNext ) {
+        btnNext.addEventListener( 'click', function () {
+            goToPage( currentPage + 1 );
+        } );
+    }
+
+    // ── Listeners dos bullets ─────────────────────────
+    bullets.forEach( function ( bullet, i ) {
+        bullet.addEventListener( 'click', function () {
+            goToPage( i );
+        } );
+    } );
+
+    // ── Navegação por teclado (←/→) ──────────────────
+    carousel.addEventListener( 'keydown', function ( e ) {
+        if ( e.key === 'ArrowLeft' )  goToPage( currentPage - 1 );
+        if ( e.key === 'ArrowRight' ) goToPage( currentPage + 1 );
+    } );
+
+    // ── Suporte a swipe (touch) ───────────────────────
+    let touchStartX = 0;
+
+    carousel.addEventListener( 'touchstart', function ( e ) {
+        touchStartX = e.changedTouches[ 0 ].clientX;
+    }, { passive: true } );
+
+    carousel.addEventListener( 'touchend', function ( e ) {
+        const delta = touchStartX - e.changedTouches[ 0 ].clientX;
+        if ( Math.abs( delta ) < 50 ) return; // ignora swipes curtos
+        if ( delta > 0 ) {
+            goToPage( currentPage + 1 ); // swipe para esquerda → próxima
+        } else {
+            goToPage( currentPage - 1 ); // swipe para direita → anterior
+        }
+    }, { passive: true } );
+
+    // ── Estado inicial ────────────────────────────────
+    goToPage( 0 );
+
+} )();
+

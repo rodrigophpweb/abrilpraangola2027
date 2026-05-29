@@ -1,0 +1,289 @@
+/* ====================================================
+   COMPONENTE — SECTION TICKETS (Ingressos / Pacotes)
+   CSS Nesting + Grid Layout | Sem Flexbox
+   Breakpoints: lg 1024px | md 768px | sm 480px
+   Base: 16px = 1rem
+   ==================================================== */
+
+    /* ────────────────────────────────────────────────────
+       SECTION WRAPPER
+    ──────────────────────────────────────────────────── */
+.section-tickets {
+    background-color: var(--color-neutral-50);
+    padding-block: var(--spacing-20);              /* 5rem / 80px */
+
+    /* ── Header da seção ── */
+    & .section-tickets__header {
+        display: grid;
+        grid-template-columns: 1fr;
+        justify-items: start;
+        gap: var(--spacing-4);                     /* 1rem / 16px */
+        margin-block-end: var(--spacing-12);       /* 3rem / 48px */
+        text-align: left;
+    }
+
+    /* ── H2 — padrão do tema: linha decorativa via ::after ── */
+    & h2 {
+        color: var(--color-neutral-800);
+        font-size: var(--font-size-3xl);           /* 2.25rem / 36px */
+        font-weight: var(--font-weight-bold);
+        line-height: var(--line-height-tight);
+        margin: 0;
+
+        &::after {
+            content: '';
+            display: block;
+            width: 3rem;                           /* 48px */
+            height: 0.25rem;                       /* 4px */
+            background-color: var(--color-primary-500);
+            border-radius: var(--radius-full);
+            margin-block-start: var(--spacing-4);  /* 1rem / 16px */
+        }
+    }
+
+    /* ── Descrição da seção ── */
+    & .section-tickets__desc {
+        color: var(--color-text-muted);
+        font-size: var(--font-size-md);            /* 1.125rem / 18px */
+        line-height: var(--line-height-relaxed);
+        max-width: 44rem;                          /* 704px */
+
+        & p {
+            margin: 0;
+        }
+    }
+
+    /* ── Grid de cards (auto-fit responsivo) ── */
+    & .section-tickets__grid {
+        display: grid;
+        grid-template-columns: repeat( auto-fit, minmax( 18rem, 1fr ) ); /* min 288px */
+        gap: var(--spacing-8);                     /* 2rem / 32px */
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        align-items: stretch;                      /* todos os li com a mesma altura */
+    }
+}
+
+/* ────────────────────────────────────────────────────
+   TICKET CARD
+──────────────────────────────────────────────────── */
+.ticket-card {
+    background-color: var(--color-neutral-0);
+    border-radius: var(--radius-xl);               /* 16px */
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+    border: var(--border-width-thin) solid var(--color-border);
+    height: 100%;                                  /* ocupa toda a altura da célula do grid */
+    transition: transform var(--transition-base),
+                box-shadow var(--transition-base);
+
+    &:hover {
+        transform: translateY( -0.25rem );         /* -4px */
+        box-shadow: var(--shadow-2xl);
+    }
+
+    /* ── Foco acessível no card inteiro (via link interno) ── */
+    &:focus-within {
+        outline: var(--border-width-base) solid var(--color-primary-500);
+        outline-offset: 0.125rem;                  /* 2px */
+    }
+
+    /* ── Variante: pacote expirado ── */
+    &.ticket-card--expirado {
+        opacity: 0.65;
+        filter: grayscale( 0.4 );
+
+        &:hover {
+            transform: none;
+            box-shadow: var(--shadow-lg);
+        }
+    }
+
+    /* ── Article: 3 linhas (header / body ocupa o espaço / footer fixo no fundo) ── */
+    & article {
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        height: 100%;                              /* empurra o footer sempre para o fundo */
+    }
+
+    /* ── Header do card ── */
+    & .ticket-card__header {
+        background-color: var(--color-neutral-800);
+        padding: var(--spacing-6);                 /* 1.5rem / 24px */
+        display: grid;
+        gap: var(--spacing-3);                     /* 0.75rem / 12px */
+    }
+
+    /* ── Badge de disponibilidade ── */
+    & .ticket-card__badge {
+        display: inline-grid;
+        place-items: center;
+        padding: var(--spacing-1) var(--spacing-3); /* 4px 12px */
+        border-radius: var(--radius-full);
+        font-size: var(--font-size-xs);            /* 0.75rem / 12px */
+        font-weight: var(--font-weight-semibold);
+        letter-spacing: var(--letter-spacing-wider);
+        text-transform: uppercase;
+        width: fit-content;
+
+        &.ticket-card__badge--disponivel {
+            background-color: var(--color-success);
+            color: var(--color-neutral-0);
+        }
+
+        &.ticket-card__badge--esgotado {
+            background-color: var(--color-neutral-500);
+            color: var(--color-neutral-0);
+        }
+    }
+
+    /* ── Título (h3) ── */
+    & .ticket-card__title {
+        color: var(--color-neutral-0);
+        font-size: var(--font-size-xl);            /* 1.5rem / 24px */
+        font-weight: var(--font-weight-bold);
+        line-height: var(--line-height-snug);
+        margin: 0;
+    }
+
+    /* ── Corpo: conteúdo e itens incluídos ── */
+    & .ticket-card__body {
+        padding: var(--spacing-6);
+
+        & .content > p {
+            font-size: var(--font-size-base);
+            color: var(--color-text-muted);
+            line-height: var(--line-height-relaxed);
+            margin-block-end: var(--spacing-4);    /* 1rem / 16px */
+        }
+    }
+
+    /* ── Lista de itens incluídos ── */
+    & .ticket-card__includes {
+        display: grid;
+        gap: var(--spacing-2);                     /* 0.5rem / 8px */
+        padding: 0;
+        margin: 0;
+        list-style: none;
+
+        & li {
+            display: grid;
+            grid-template-columns: 1rem 1fr;       /* 16px ícone + texto */
+            gap: var(--spacing-2);
+            font-size: var(--font-size-sm);        /* 0.875rem / 14px */
+            color: var(--color-text);
+            line-height: var(--line-height-normal);
+
+            & span[aria-hidden] {
+                color: var(--color-success);
+                font-weight: var(--font-weight-bold);
+                justify-self: center;
+            }
+        }
+    }
+
+    /* ── Rodapé do card ── */
+    & .ticket-card__footer {
+        padding: var(--spacing-6);
+        border-top: var(--border-width-thin) solid var(--color-border);
+        background-color: var(--color-neutral-50);
+        display: grid;
+        gap: var(--spacing-4);                     /* 1rem / 16px */
+    }
+
+    /* ── Título "Investimento" ── */
+    & .ticket-card__investment-title {
+        font-size: var(--font-size-xs);            /* 0.75rem / 12px */
+        font-weight: var(--font-weight-semibold);
+        text-transform: uppercase;
+        letter-spacing: var(--letter-spacing-wider);
+        color: var(--color-text-muted);
+            margin: 0 0 var(--spacing-2) 0;
+    }
+
+    /* ── Preço à vista (único valor exibido no card) ── */
+    & .ticket-card__price-avista {
+        margin: 0;
+
+        & .avista {
+            font-size: var(--font-size-3xl);       /* 2.25rem / 36px */
+            font-weight: var(--font-weight-extrabold);
+            color: var(--color-primary-500);
+            line-height: 1;
+            display: block;
+        }
+    }
+
+    /* ── Validade do ingresso ── */
+    & .ticket-card__validade {
+        margin: 0;
+
+        & .valTicket {
+            display: grid;
+            grid-template-columns: 1fr;
+            font-size: var(--font-size-xs);        /* 0.75rem / 12px */
+            color: var(--color-text-muted);
+            background-color: var(--color-neutral-100);
+            padding: var(--spacing-2) var(--spacing-3); /* 8px 12px */
+            border-radius: var(--radius-md);
+            width: 100%;
+        }
+    }
+
+    /* ── Botão CTA (ocupa toda a largura) ── */
+    & .btn {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+}
+
+/* ────────────────────────────────────────────────────
+   RESPONSIVO — tablet ≤ 768px
+──────────────────────────────────────────────────── */
+@media ( max-width: 768px ) {
+    .section-tickets {
+        padding-block: var(--spacing-12);          /* 3rem / 48px */
+
+        & h2 {
+            font-size: var(--font-size-2xl);       /* 1.875rem / 30px */
+        }
+
+        & .section-tickets__header {
+            margin-block-end: var(--spacing-8);    /* 2rem / 32px */
+        }
+
+        & .section-tickets__grid {
+            grid-template-columns: 1fr;
+            gap: var(--spacing-6);                 /* 1.5rem / 24px */
+        }
+    }
+}
+
+/* ────────────────────────────────────────────────────
+   RESPONSIVO — mobile ≤ 480px
+──────────────────────────────────────────────────── */
+@media ( max-width: 480px ) {
+    .section-tickets {
+        padding-block: var(--spacing-10);          /* 2.5rem / 40px */
+
+        & h2 {
+            font-size: var(--font-size-xl);        /* 1.5rem / 24px */
+        }
+    }
+
+    .ticket-card {
+        & .ticket-card__header,
+        & .ticket-card__body,
+        & .ticket-card__footer {
+            padding: var(--spacing-4);             /* 1rem / 16px */
+        }
+
+        /* Preços em coluna única no mobile */
+        & .ticket-card__prices {
+            grid-template-columns: 1fr;
+        }
+    }
+}
+

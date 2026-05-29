@@ -148,6 +148,19 @@ function abril_register_theme_options_fields(): void {
                 'wrapper'       => [ 'width' => '50' ],
             ],
             [
+                'key'          => 'field_abril_introducao_evento',
+                'label'        => 'Introdução sobre o Evento',
+                'name'         => 'introducao_evento',
+                'type'         => 'wysiwyg',
+                'instructions' => 'Texto introdutório sobre o evento, exibido na seção de resumo da página inicial.',
+                'required'     => 0,
+                'tabs'         => 'all',
+                'toolbar'      => 'basic',
+                'media_upload' => 0,
+                'delay'        => 0,
+                'wrapper'      => [ 'width' => '100' ],
+            ],
+            [
                 'key'           => 'field_abril_local_evento',
                 'label'         => 'Local do Evento',
                 'name'          => 'local_evento',
@@ -323,6 +336,239 @@ function abril_register_theme_options_fields(): void {
                 'placeholder'  => "Banco: Nubank\nAgência: 0001\nConta: 12345678-9\nTitular: Nome Completo\nCPF: 000.000.000-00",
                 'wrapper'      => [ 'width' => '100' ],
             ],
+
+            // ── Aba: Home ────────────────────────────────
+            [
+                'key'       => 'field_abril_tab_home',
+                'label'     => 'Home',
+                'name'      => '',
+                'type'      => 'tab',
+                'placement' => 'top',
+            ],
+
+            // ── Accordion: Responsável do Evento ─────────
+            [
+                'key'          => 'field_abril_acc_responsavel',
+                'label'        => '🎖️ Responsável do Evento',
+                'name'         => '',
+                'type'         => 'accordion',
+                'open'         => 1,
+                'multi_expand' => 1,
+                'endpoint'     => 0,
+            ],
+            [
+                'key'           => 'field_abril_foto_responsavel',
+                'label'         => '📸 Foto do Mestre do Evento',
+                'name'          => 'foto_responsavel',
+                'type'          => 'image',
+                'instructions'  => 'Imagem do responsável/mestre do evento. Recomendado: 800×800px ou superior.',
+                'return_format' => 'array',
+                'preview_size'  => 'medium',
+                'library'       => 'all',
+                'wrapper'       => [ 'width' => '100' ],
+            ],
+            [
+                'key'         => 'field_abril_titulo_responsavel',
+                'label'       => 'Título da Seção',
+                'name'        => 'titulo_responsavel',
+                'type'        => 'text',
+                'placeholder' => 'Ex: Conheça o Mestre do Evento',
+                'wrapper'     => [ 'width' => '50' ],
+            ],
+            [
+                'key'         => 'field_abril_subtitulo_responsavel',
+                'label'       => 'Subtítulo da Seção',
+                'name'        => 'subtitulo_responsavel',
+                'type'        => 'text',
+                'placeholder' => 'Ex: Um apaixonado pela cultura angolana',
+                'wrapper'     => [ 'width' => '50' ],
+            ],
+            [
+                'key'         => 'field_abril_descricao_responsavel',
+                'label'       => 'Descrição da Seção',
+                'name'        => 'descricao_responsavel',
+                'type'        => 'textarea',
+                'rows'        => 6,
+                'placeholder' => 'Descreva o responsável/mestre do evento...',
+                'wrapper'     => [ 'width' => '100' ],
+            ],
+
+            // ── Accordion: Atividades do Evento ──────────
+            [
+                'key'          => 'field_abril_acc_atividades',
+                'label'        => '🎯 Atividades do Evento',
+                'name'         => '',
+                'type'         => 'accordion',
+                'open'         => 0,
+                'multi_expand' => 1,
+                'endpoint'     => 0,
+            ],
+            [
+                'key'           => 'field_abril_foto_atividades',
+                'label'         => '📸 Foto das Atividades',
+                'name'          => 'foto_atividades',
+                'type'          => 'image',
+                'instructions'  => 'Imagem representativa das atividades do evento. Recomendado: 1200×800px ou superior.',
+                'return_format' => 'array',
+                'preview_size'  => 'medium',
+                'library'       => 'all',
+                'wrapper'       => [ 'width' => '100' ],
+            ],
+            [
+                'key'         => 'field_abril_titulo_atividades',
+                'label'       => 'Título da Seção',
+                'name'        => 'titulo_atividades',
+                'type'        => 'text',
+                'placeholder' => 'Ex: Atividades do Evento',
+                'wrapper'     => [ 'width' => '50' ],
+            ],
+            [
+                'key'         => 'field_abril_subtitulo_atividades',
+                'label'       => 'Subtítulo da Seção',
+                'name'        => 'subtitulo_atividades',
+                'type'        => 'text',
+                'placeholder' => 'Ex: Momentos únicos que você não pode perder',
+                'wrapper'     => [ 'width' => '50' ],
+            ],
+            [
+                'key'         => 'field_abril_descricao_atividades',
+                'label'       => 'Descrição da Seção',
+                'name'        => 'descricao_atividades',
+                'type'        => 'textarea',
+                'rows'        => 6,
+                'placeholder' => 'Descreva as atividades do evento...',
+                'wrapper'     => [ 'width' => '100' ],
+            ],
+
+            // ── Accordion: Seção Inscreva-se ─────────────
+            [
+                'key'          => 'field_abril_acc_subscribe',
+                'label'        => '📣 Seção Inscreva-se',
+                'name'         => '',
+                'type'         => 'accordion',
+                'open'         => 0,
+                'multi_expand' => 1,
+                'endpoint'     => 0,
+            ],
+            [
+                'key'         => 'field_abril_subscribe_titulo',
+                'label'       => 'Título da Seção',
+                'name'        => 'subscribe_titulo',
+                'type'        => 'text',
+                'instructions'=> 'Título principal da seção de inscrição. Ex: Garanta sua vaga no Abril pra Angola!',
+                'placeholder' => 'Ex: Garanta sua vaga no Abril pra Angola!',
+                'wrapper'     => [ 'width' => '100' ],
+            ],
+            [
+                'key'         => 'field_abril_subscribe_descricao',
+                'label'       => 'Descrição da Seção',
+                'name'        => 'subscribe_descricao',
+                'type'        => 'textarea',
+                'instructions'=> 'Texto de apoio exibido abaixo do título da seção de inscrição.',
+                'rows'        => 4,
+                'placeholder' => 'Ex: Não perca a oportunidade de vivenciar a cultura angolana. Inscreva-se já!',
+                'wrapper'     => [ 'width' => '100' ],
+            ],
+
+            // ── Accordion: Seção Ingressos ───────────────
+            [
+                'key'          => 'field_abril_acc_tickets',
+                'label'        => '🎟️ Seção Ingressos',
+                'name'         => '',
+                'type'         => 'accordion',
+                'open'         => 0,
+                'multi_expand' => 1,
+                'endpoint'     => 0,
+            ],
+            [
+                'key'         => 'field_abril_tickets_titulo',
+                'label'       => 'Título da Seção',
+                'name'        => 'tickets_titulo',
+                'type'        => 'text',
+                'instructions'=> 'Título exibido no topo da seção de ingressos. Ex: Ingressos & Pacotes',
+                'placeholder' => 'Ex: Ingressos & Pacotes',
+                'wrapper'     => [ 'width' => '100' ],
+            ],
+            [
+                'key'          => 'field_abril_tickets_descricao',
+                'label'        => 'Descrição da Seção',
+                'name'         => 'tickets_descricao',
+                'type'         => 'wysiwyg',
+                'instructions' => 'Texto introdutório da seção de ingressos, exibido abaixo do título.',
+                'tabs'         => 'all',
+                'toolbar'      => 'basic',
+                'media_upload' => 0,
+                'delay'        => 0,
+                'wrapper'      => [ 'width' => '100' ],
+            ],
+
+            // ── Fecha o último accordion da aba Home ──────
+            [
+                'key'      => 'field_abril_acc_home_end',
+                'label'    => '',
+                'name'     => '',
+                'type'     => 'accordion',
+                'endpoint' => 1,
+            ],
+
+            // ── Aba: FAQ ─────────────────────────────────
+            [
+                'key'       => 'field_abril_tab_faq',
+                'label'     => 'FAQ',
+                'name'      => '',
+                'type'      => 'tab',
+                'placement' => 'top',
+            ],
+            [
+                'key'           => 'field_abril_faq_titulo',
+                'label'         => 'Título da Seção FAQ',
+                'name'          => 'faq_titulo',
+                'type'          => 'text',
+                'instructions'  => 'Título exibido no topo da seção de Perguntas Frequentes.',
+                'default_value' => 'Perguntas Frequentes',
+                'placeholder'   => 'Ex: Perguntas Frequentes',
+                'wrapper'       => [ 'width' => '100' ],
+            ],
+            [
+                'key'          => 'field_abril_faq_descricao',
+                'label'        => 'Descrição da Seção FAQ',
+                'name'         => 'faq_descricao',
+                'type'         => 'textarea',
+                'instructions' => 'Texto introdutório exibido abaixo do título da seção FAQ.',
+                'rows'         => 4,
+                'placeholder'  => 'Ex: Encontre aqui as respostas para as dúvidas mais comuns sobre o evento.',
+                'wrapper'      => [ 'width' => '100' ],
+            ],
+
+            // ── Aba: Oficineiros ──────────────────────────
+            [
+                'key'       => 'field_abril_tab_oficineiros',
+                'label'     => 'Oficineiros',
+                'name'      => '',
+                'type'      => 'tab',
+                'placement' => 'top',
+            ],
+            [
+                'key'          => 'field_abril_oficineiros_titulo',
+                'label'        => 'Título da Seção',
+                'name'         => 'oficineiros_titulo',
+                'type'         => 'text',
+                'instructions' => 'Título principal da seção de oficineiros. Ex: Oficineiros do Evento',
+                'placeholder'  => 'Ex: Oficineiros do Evento',
+                'wrapper'      => [ 'width' => '100' ],
+            ],
+            [
+                'key'          => 'field_abril_oficineiros_descricao',
+                'label'        => 'Descrição da Seção',
+                'name'         => 'oficineiros_descricao',
+                'type'         => 'wysiwyg',
+                'instructions' => 'Texto introdutório da seção de oficineiros, exibido abaixo do título.',
+                'tabs'         => 'all',
+                'toolbar'      => 'basic',
+                'media_upload' => 0,
+                'delay'        => 0,
+                'wrapper'      => [ 'width' => '100' ],
+            ],
         ],
         'location'              => [
             [
@@ -379,6 +625,7 @@ function abril_get_event_options(): array {
 
     return [
         'edicao_evento'       => get_field( 'edicao_evento', 'option' ),
+        'introducao_evento'   => get_field( 'introducao_evento', 'option' ),
         'local_evento'        => get_field( 'local_evento', 'option' ),
         'endereco_evento'     => get_field( 'endereco_evento', 'option' ),
         'url_google_maps'     => get_field( 'url_google_maps', 'option' ),
@@ -458,6 +705,64 @@ function abril_get_social_links(): array {
     }
 
     return $social_links;
+}
+
+/**
+ * Retorna as configurações da seção FAQ.
+ *
+ * @return array<string, string>
+ */
+function abril_get_faq_options(): array {
+    if ( ! function_exists( 'get_field' ) ) {
+        return [];
+    }
+
+    return [
+        'faq_titulo'    => get_field( 'faq_titulo', 'option' )    ?: __( 'Perguntas Frequentes', 'abril-pra-angola' ),
+        'faq_descricao' => get_field( 'faq_descricao', 'option' ) ?: '',
+    ];
+}
+
+/**
+ * Retorna as configurações da aba Home (Responsável + Atividades do evento).
+ *
+ * @return array<string, mixed>
+ */
+function abril_get_home_options(): array {
+    if ( ! function_exists( 'get_field' ) ) {
+        return [];
+    }
+
+    return [
+        'foto_responsavel'      => get_field( 'foto_responsavel', 'option' )      ?: null,
+        'titulo_responsavel'    => get_field( 'titulo_responsavel', 'option' )    ?: '',
+        'subtitulo_responsavel' => get_field( 'subtitulo_responsavel', 'option' ) ?: '',
+        'descricao_responsavel' => get_field( 'descricao_responsavel', 'option' ) ?: '',
+        'foto_atividades'       => get_field( 'foto_atividades', 'option' )       ?: null,
+        'titulo_atividades'     => get_field( 'titulo_atividades', 'option' )     ?: '',
+        'subtitulo_atividades'  => get_field( 'subtitulo_atividades', 'option' )  ?: '',
+        'descricao_atividades'  => get_field( 'descricao_atividades', 'option' )  ?: '',
+        'subscribe_titulo'      => get_field( 'subscribe_titulo', 'option' )      ?: '',
+        'subscribe_descricao'   => get_field( 'subscribe_descricao', 'option' )   ?: '',
+        'tickets_titulo'        => get_field( 'tickets_titulo', 'option' )        ?: '',
+        'tickets_descricao'     => get_field( 'tickets_descricao', 'option' )     ?: '',
+    ];
+}
+
+/**
+ * Retorna as configurações da seção de Oficineiros.
+ *
+ * @return array<string, string>
+ */
+function abril_get_oficineiros_options(): array {
+    if ( ! function_exists( 'get_field' ) ) {
+        return [];
+    }
+
+    return [
+        'oficineiros_titulo'    => get_field( 'oficineiros_titulo', 'option' )    ?: __( 'Oficineiros do Evento', 'abril-pra-angola' ),
+        'oficineiros_descricao' => get_field( 'oficineiros_descricao', 'option' ) ?: '',
+    ];
 }
 
 /**

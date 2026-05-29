@@ -1,0 +1,186 @@
+/* ====================================================
+   SEÇÃO FAQ — Perguntas Frequentes
+   Projeto: Abril pra Angola
+   Layout: CSS Grid exclusivamente
+   Unidade: rem (base 16px = 1rem)
+   ==================================================== */
+
+/* ── Seção Principal ───────────────────────────────── */
+.section-faq {
+    padding-block: var(--section-padding-y);
+    background-color: var(--color-primary-100);
+}
+
+.section-faq > .container {
+    display: grid;
+    gap: var(--spacing-12);
+}
+
+/* ── Cabeçalho ─────────────────────────────────────── */
+.section-faq__header {
+    display: grid;
+    gap: var(--spacing-4);
+    text-align: left;
+}
+
+.section-faq__title {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text);
+    line-height: var(--line-height-tight);
+}
+
+/* Linha decorativa abaixo do título */
+.section-faq__title::after {
+    content: '';
+    display: block;
+    width: 3rem;
+    height: 0.25rem;
+    background-color: var(--color-primary-0);
+    border-radius: var(--radius-full);
+    margin-block-start: var(--spacing-4);
+    margin-inline: 0;
+}
+
+.section-faq__description {
+    font-size: var(--font-size-md);
+    color: var(--color-text-muted);
+    line-height: var(--line-height-relaxed);
+}
+
+/* ── Lista de Perguntas ─────────────────────────────── */
+.section-faq__list {
+    display: grid;
+    gap: var(--spacing-3);
+    margin-inline: auto;
+    width: 100%;
+}
+
+/* ── Item FAQ (article) ─────────────────────────────── */
+.faq-item {
+    background-color: var(--color-bg);
+    border: var(--border-width-thin) solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    transition:
+        box-shadow var(--transition-base),
+        border-color var(--transition-base);
+}
+
+.faq-item:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-primary-0);
+}
+
+.faq-item__details {
+    width: 100%;
+}
+
+/* ── Summary — Pergunta ─────────────────────────────── */
+.faq-item__question {
+    display: grid;
+    grid-template-columns: 1fr 1.25rem;
+    align-items: center;
+    gap: var(--spacing-4);
+    padding: var(--spacing-5) var(--spacing-6);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text);
+    cursor: pointer;
+    list-style: none;
+    line-height: var(--line-height-snug);
+    transition:
+        color var(--transition-fast),
+        background-color var(--transition-fast);
+    user-select: none;
+}
+
+/* Remove marcador nativo do summary */
+.faq-item__question::-webkit-details-marker {
+    display: none;
+}
+
+.faq-item__question::marker {
+    display: none;
+}
+
+/* Ícone de seta via SVG inline — cor primária do projeto */
+.faq-item__question::after {
+    content: '';
+    display: block;
+    width: 1.25rem;
+    height: 1.25rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23E5720A' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: contain;
+    transition: transform var(--transition-bounce);
+    flex-shrink: 0;
+}
+
+/* Estado aberto — realce visual na pergunta */
+.faq-item__details[open] > .faq-item__question {
+    color: var(--color-primary-0);
+    background-color: var(--color-neutral-900);
+}
+
+/* Rotaciona a seta quando aberto */
+.faq-item__details[open] > .faq-item__question::after {
+    transform: rotate(180deg);
+}
+
+/* ── Resposta ───────────────────────────────────────── */
+.faq-item__answer {
+    border-top: var(--border-width-thin) solid var(--color-border);
+    background-color: var(--color-bg);
+}
+
+.faq-item__answer-text {
+    display: grid;
+    gap: var(--spacing-4);
+    padding: var(--spacing-5) var(--spacing-6);
+    font-size: var(--font-size-base);
+    color: var(--color-text-muted);
+    line-height: var(--line-height-relaxed);
+}
+
+/* Remove margem residual do WordPress no conteúdo do editor */
+.faq-item__answer-text > *:last-child {
+    margin-block-end: 0;
+}
+
+.faq-item__answer-text p {
+    margin-block-end: 0;
+}
+
+/* ── Responsivo: Tablet ─────────────────────────────── */
+@media (min-width: 48rem) {
+    .section-faq__title {
+        font-size: var(--font-size-3xl);
+    }
+
+    .section-faq__list {
+        gap: var(--spacing-4);
+    }
+
+    .faq-item__question {
+        font-size: var(--font-size-md);
+        padding: var(--spacing-6) var(--spacing-8);
+    }
+
+    .faq-item__answer-text {
+        padding: var(--spacing-6) var(--spacing-8);
+    }
+}
+
+/* ── Responsivo: Desktop ────────────────────────────── */
+@media (min-width: 64rem) {
+    .section-faq__title {
+        font-size: var(--font-size-4xl);
+    }
+
+    .section-faq__list {
+        gap: var(--spacing-5);
+    }
+}
+

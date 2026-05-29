@@ -1,0 +1,337 @@
+/* ====================================================
+   SEÇÃO PATROCINADORES — Parceiros e Apoio
+   Projeto: Abril pra Angola
+   Layout: CSS Grid + Flexbox
+   Unidade: rem (base 16px = 1rem)
+   ==================================================== */
+
+/* ── Seção Principal ───────────────────────────────── */
+.section-sponsors {
+    padding-block: var(--section-padding-y);
+    background-color: var(--color-bg-alt);
+}
+
+.section-sponsors > .container {
+    display: grid;
+    gap: var(--spacing-12);
+}
+
+/* ── Cabeçalho ─────────────────────────────────────── */
+.section-sponsors__header {
+    display: grid;
+    gap: var(--spacing-4);
+    text-align: left;
+}
+
+/* Título — idêntico ao FAQ em cor e tipologia */
+.section-sponsors__title {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text);
+    line-height: var(--line-height-tight);
+}
+
+/* Linha decorativa abaixo do título — padrão FAQ */
+.section-sponsors__title::after {
+    content: '';
+    display: block;
+    width: 3rem;
+    height: 0.25rem;
+    background-color: var(--color-primary-0);
+    border-radius: var(--radius-full);
+    margin-block-start: var(--spacing-4);
+    margin-inline: 0;
+}
+
+/* ── Carousel — Estrutura ───────────────────────────── */
+.sponsors-carousel {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-4);
+}
+
+/* ── Viewport — Janela de visualização ─────────────── */
+.sponsors-carousel__viewport {
+    flex: 1;
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+}
+
+/* ── Track — Trilho deslizante ─────────────────────── */
+.sponsors-carousel__track {
+    display: flex;
+    transition: transform var(--transition-slow);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    will-change: transform;
+}
+
+/* ── Slide — Cada página de 4 itens ────────────────── */
+.sponsors-carousel__slide {
+    flex: 0 0 100%;
+    min-width: 0;
+    list-style: none;
+}
+
+/* ── Grupo — Grade de 4 patrocinadores ─────────────── */
+.sponsors-carousel__group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-6);
+    padding: var(--spacing-2);
+    list-style: none;
+    margin: 0;
+}
+
+/* ── Item individual do patrocinador ──────────────── */
+.sponsor-item {
+    display: flex;
+    align-items: stretch;
+}
+
+/* ── Link wrapper ─────────────────────────────────── */
+.sponsor-item__link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-3);
+    width: 100%;
+    padding: var(--spacing-5) var(--spacing-4);
+    background-color: var(--color-bg);
+    border: var(--border-width-thin) solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    text-decoration: none;
+    color: var(--color-text-muted);
+    transition:
+        box-shadow var(--transition-base),
+        border-color var(--transition-base),
+        transform var(--transition-base),
+        background-color var(--transition-fast);
+}
+
+.sponsor-item__link:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-primary-0);
+    transform: translateY(-0.125rem);
+    color: var(--color-text);
+}
+
+.sponsor-item__link:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-xs);
+    background-color: var(--color-primary-100);
+    border-color: var(--color-primary-0);
+}
+
+.sponsor-item__link:focus-visible {
+    outline: var(--border-width-base) solid var(--color-primary-0);
+    outline-offset: 0.125rem;
+}
+
+/* Item sem link */
+.sponsor-item:not(:has(.sponsor-item__link)) {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-3);
+    padding: var(--spacing-5) var(--spacing-4);
+    background-color: var(--color-bg);
+    border: var(--border-width-thin) solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+/* ── Figure e imagem do logo ────────────────────────── */
+.sponsor-item__figure {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 9.375rem; /* 150px ÷ 16px = 9.375rem */
+    overflow: hidden;
+    margin: 0;
+}
+
+.sponsor-item__logo {
+    height: 9.375rem; /* 150px ÷ 16px = 9.375rem */
+    width: auto;
+    max-width: 100%;
+    object-fit: contain;
+    object-position: center;
+    display: block;
+    transition: filter var(--transition-base), opacity var(--transition-base);
+}
+
+/* Efeito hover na imagem via link pai */
+.sponsor-item__link:hover .sponsor-item__logo {
+    filter: none;
+    opacity: 1;
+}
+
+/* Placeholder quando não há imagem */
+.sponsor-item__logo-placeholder {
+    display: block;
+    width: 6rem;
+    height: 6rem;
+    border-radius: var(--radius-full);
+    background-color: var(--color-neutral-200);
+}
+
+/* ── Nome do patrocinador ─────────────────────────── */
+.sponsor-item__name {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-muted);
+    text-align: center;
+    line-height: var(--line-height-snug);
+    transition: color var(--transition-fast);
+}
+
+.sponsor-item__link:hover .sponsor-item__name {
+    color: var(--color-primary-0);
+}
+
+/* ── Botões de navegação (setas) ────────────────────── */
+.sponsors-carousel__btn {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;   /* 44px */
+    height: 2.75rem;  /* 44px */
+    border-radius: var(--radius-full);
+    background-color: var(--color-bg);
+    border: var(--border-width-base) solid var(--color-border);
+    color: var(--color-primary-0);
+    box-shadow: var(--shadow-sm);
+    cursor: pointer;
+    transition:
+        background-color var(--transition-fast),
+        border-color var(--transition-fast),
+        color var(--transition-fast),
+        box-shadow var(--transition-fast),
+        transform var(--transition-fast);
+}
+
+.sponsors-carousel__btn:hover:not(:disabled) {
+    background-color: var(--color-primary-0);
+    border-color: var(--color-primary-0);
+    color: var(--color-neutral-800);
+    box-shadow: var(--shadow-md);
+    transform: scale(1.08);
+}
+
+.sponsors-carousel__btn:active:not(:disabled) {
+    background-color: var(--color-primary-400);
+    border-color: var(--color-primary-500);
+    color: var(--color-neutral-0);
+    transform: scale(0.96);
+    box-shadow: var(--shadow-xs);
+}
+
+.sponsors-carousel__btn:focus-visible {
+    outline: var(--border-width-base) solid var(--color-primary-0);
+    outline-offset: 0.125rem;
+}
+
+/* Estado desabilitado (primeira/última página) */
+.sponsors-carousel__btn:disabled,
+.sponsors-carousel__btn.is-disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    pointer-events: none;
+    box-shadow: none;
+    transform: none;
+}
+
+/* ── Navegação por Bullets ──────────────────────────── */
+.sponsors-carousel__nav {
+    display: flex;
+    justify-content: center;
+    margin-block-start: var(--spacing-8);
+}
+
+.sponsors-carousel__bullets {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-3);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.sponsors-carousel__bullet-item {
+    list-style: none;
+}
+
+/* Bullet base */
+.sponsors-carousel__bullet {
+    display: block;
+    width: 0.625rem;  /* 10px */
+    height: 0.625rem; /* 10px */
+    padding: 0;
+    border-radius: var(--radius-full);
+    background-color: var(--color-neutral-300);
+    border: none;
+    cursor: pointer;
+    transition:
+        background-color var(--transition-base),
+        transform var(--transition-base),
+        width var(--transition-base);
+}
+
+/* Bullet hover */
+.sponsors-carousel__bullet:hover {
+    background-color: var(--color-primary-300);
+    transform: scale(1.25);
+}
+
+/* Bullet ativo */
+.sponsors-carousel__bullet.is-active {
+    background-color: var(--color-primary-0);
+    width: 1.75rem; /* pill expandida */
+    transform: none;
+}
+
+/* Bullet ativo hover */
+.sponsors-carousel__bullet.is-active:hover {
+    background-color: var(--color-primary-0);
+    transform: none;
+}
+
+.sponsors-carousel__bullet:focus-visible {
+    outline: var(--border-width-base) solid var(--color-primary-0);
+    outline-offset: 0.25rem;
+}
+
+/* ── Responsivo: Tablet (≥ 768px) ────────────────────── */
+@media (min-width: 48rem) {
+    .section-sponsors__title {
+        font-size: var(--font-size-3xl);
+    }
+
+    .sponsors-carousel__group {
+        grid-template-columns: repeat(4, 1fr);
+        gap: var(--spacing-8);
+    }
+
+    .sponsors-carousel__btn {
+        width: 3rem;
+        height: 3rem;
+    }
+}
+
+/* ── Responsivo: Desktop (≥ 1024px) ──────────────────── */
+@media (min-width: 64rem) {
+    .section-sponsors__title {
+        font-size: var(--font-size-4xl);
+    }
+
+    .sponsors-carousel {
+        gap: var(--spacing-6);
+    }
+}
+

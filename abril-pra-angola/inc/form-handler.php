@@ -27,6 +27,7 @@ function abril_processar_inscricao() {
     $forma_pagamento  = sanitize_text_field( $_POST['forma_pagamento'] ?? '' );
     $data_pagamento   = sanitize_text_field( $_POST['data_pagamento'] ?? '' );
     $transporte       = isset( $_POST['transporte'] ) ? 1 : 0;
+    $valor_total      = floatval( $_POST['valor_total'] ?? 0 );
     $termo            = isset( $_POST['termo'] );
 
     $erros = [];
@@ -100,6 +101,17 @@ function abril_processar_inscricao() {
     update_field( 'field_inscrito_transporte',               $transporte,               $post_id );
     update_field( 'field_inscrito_status',                   'pendente',                $post_id );
     update_field( 'field_inscrito_user_id',                  $user_id,                  $post_id );
+
+    // Salvar valor total calculado (pacote + transporte, pelo método de pagamento escolhido)
+    if ( $valor_total > 0 ) {
+        update_field( 'field_inscrito_valor_total', $valor_total, $post_id );
+    } else {
+        // Fallback: calcular no servidor caso o campo hidden venha zerado
+        $campo_preco = ( $forma_pagamento === 'cartao' ) ? 'pacote_preco_cartao' : 'pacote_preco_avista';
+        $preco_pacote = $pacote_id ? (float) get_field( $campo_preco, $pacote_id ) : 0;
+        $valor_total  = $preco_pacote + ( $transporte ? 70 : 0 );
+        update_field( 'field_inscrito_valor_total', $valor_total, $post_id );
+    }
 
     update_post_meta( $post_id, '_status_anterior_inscrito', 'pendente' );
 
@@ -217,12 +229,16 @@ function abril_ajax_get_pacote() {
     $pacote_id = intval( $_POST['pacote_id'] ?? 0 );
     if ( ! $pacote_id ) wp_send_json_error();
 
-    $preco   = get_field( 'pacote_preco',   $pacote_id );
-    $link_mp = get_field( 'pacote_link_mp', $pacote_id );
+    $preco_avista = get_field( 'pacote_preco_avista', $pacote_id );
+    $preco_cartao = get_field( 'pacote_preco_cartao', $pacote_id );
+    $link_mp      = get_field( 'pacote_link_mp',      $pacote_id );
 
     wp_send_json_success( [
-        'preco'   => number_format( (float) $preco, 2, ',', '.' ),
-        'link_mp' => $link_mp,
+        'preco_avista' => number_format( (float) $preco_avista, 2, ',', '.' ),
+        'preco_cartao' => number_format( (float) $preco_cartao, 2, ',', '.' ),
+        'link_mp'      => $link_mp,
+        // Compatibilidade retroativa
+        'preco'        => number_format( (float) $preco_avista, 2, ',', '.' ),
     ] );
 }
 add_action( 'wp_ajax_abril_get_pacote',        'abril_ajax_get_pacote' );

@@ -146,16 +146,50 @@ $status_inscricao = $inscrito ? get_field( 'inscrito_status', $inscrito->ID ) : 
                         Envie abaixo o comprovante do pagamento para confirmarmos a sua vaga.
                     </p>
                     <?php
-                    $pacote_id = get_field( 'inscrito_pacote_id', $inscrito->ID );
-                    $pacote    = $pacote_id ? get_post( $pacote_id ) : null;
-                    $preco     = $pacote_id ? get_field( 'pacote_preco', $pacote_id ) : null;
+                    $pacote_id        = get_field( 'inscrito_pacote_id',       $inscrito->ID );
+                    $forma_pagamento  = get_field( 'inscrito_forma_pagamento',  $inscrito->ID );
+                    $tem_transporte   = get_field( 'inscrito_transporte',       $inscrito->ID );
+                    $valor_total_salvo = get_field( 'inscrito_valor_total',     $inscrito->ID );
+                    $pacote           = $pacote_id ? get_post( $pacote_id ) : null;
+
+                    // Determinar preço correto pelo método de pagamento
+                    if ( $pacote_id ) {
+                        if ( $forma_pagamento === 'cartao' ) {
+                            $preco_pacote = (float) get_field( 'pacote_preco_cartao', $pacote_id );
+                            $label_preco  = 'Cartão de Crédito';
+                        } else {
+                            $preco_pacote = (float) get_field( 'pacote_preco_avista', $pacote_id );
+                            $label_preco  = ( $forma_pagamento === 'pix' ) ? 'PIX' : 'Depósito Bancário';
+                        }
+                    } else {
+                        $preco_pacote = 0;
+                        $label_preco  = '—';
+                    }
+
+                    $preco_transporte = $tem_transporte ? 70 : 0;
+                    $total_calculado  = $valor_total_salvo > 0
+                                        ? (float) $valor_total_salvo
+                                        : ( $preco_pacote + $preco_transporte );
+
                     if ( $pacote ) : ?>
                         <p>
                             🎟️ Pacote: <strong><?php echo esc_html( $pacote->post_title ); ?></strong>
-                            <?php if ( $preco ) : ?>
-                                — R$ <?php echo number_format( (float) $preco, 2, ',', '.' ); ?>
+                            <?php if ( $preco_pacote ) : ?>
+                                — <?php echo 'R$ ' . number_format( $preco_pacote, 2, ',', '.' ); ?>
+                                <small>(<?php echo esc_html( $label_preco ); ?>)</small>
                             <?php endif; ?>
                         </p>
+                        <?php if ( $tem_transporte ) : ?>
+                            <p>🚌 Transporte até a chácara — <strong>R$ 70,00</strong></p>
+                        <?php endif; ?>
+                        <?php if ( $total_calculado > 0 ) : ?>
+                            <p class="comprovante-info__total">
+                                💰 <strong>Total a pagar: R$ <?php echo number_format( $total_calculado, 2, ',', '.' ); ?></strong>
+                                <?php if ( $forma_pagamento === 'cartao' ) : ?>
+                                    <small>— pode parcelar em até 2x no cartão</small>
+                                <?php endif; ?>
+                            </p>
+                        <?php endif; ?>
                     <?php endif; ?>
                 </div>
 

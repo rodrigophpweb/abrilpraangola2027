@@ -7,7 +7,7 @@
 if ( ! function_exists( 'acf_add_local_field_group' ) ) return;
 
 // ═══════════════════════════════════════════════════════════════
-// 1. PACOTES — Preço, Link Mercado Pago e Descrição
+// 1. PACOTES — Preços (à vista / cartão), Link Mercado Pago e Descrição
 // ═══════════════════════════════════════════════════════════════
 acf_add_local_field_group( [
     'key'      => 'group_pacote_detalhes',
@@ -17,14 +17,28 @@ acf_add_local_field_group( [
     'style'    => 'seamless',
     'fields'   => [
         [
-            'key'           => 'field_pacote_preco',
-            'name'          => 'pacote_preco',
-            'label'         => '💰 Preço (R$)',
-            'type'          => 'number',
-            'min'           => 0,
-            'step'          => '0.01',
-            'prepend'       => 'R$',
-            'required'      => 1,
+            'key'          => 'field_pacote_preco_avista',
+            'name'         => 'pacote_preco_avista',
+            'label'        => '💰 Preço à Vista (Depósito / PIX)',
+            'type'         => 'number',
+            'min'          => 0,
+            'step'         => '0.01',
+            'prepend'      => 'R$',
+            'required'     => 1,
+            'instructions' => 'Valor para pagamento via depósito bancário ou PIX.',
+            'wrapper'      => [ 'width' => '50' ],
+        ],
+        [
+            'key'          => 'field_pacote_preco_cartao',
+            'name'         => 'pacote_preco_cartao',
+            'label'        => '💳 Preço no Cartão de Crédito',
+            'type'         => 'number',
+            'min'          => 0,
+            'step'         => '0.01',
+            'prepend'      => 'R$',
+            'required'     => 1,
+            'instructions' => 'Valor para pagamento via cartão de crédito (Mercado Pago). Pode ser parcelado em até 2x.',
+            'wrapper'      => [ 'width' => '50' ],
         ],
         [
             'key'           => 'field_pacote_link_mp',
@@ -33,6 +47,17 @@ acf_add_local_field_group( [
             'type'          => 'url',
             'placeholder'   => 'https://mpago.la/...',
             'instructions'  => 'Link gerado no Mercado Pago para pagamento com cartão de crédito.',
+        ],
+        [
+            'key'            => 'field_pacote_validade',
+            'name'           => 'pacote_validade',
+            'label'          => '📅 Validade do Ingresso',
+            'type'           => 'date_picker',
+            'display_format' => 'd/m/Y',
+            'return_format'  => 'd/m/Y',
+            'first_day'      => 0,
+            'instructions'   => 'Data limite para compra deste pacote.',
+            'wrapper'        => [ 'width' => '50' ],
         ],
         [
             'key'           => 'field_pacote_descricao',
@@ -233,6 +258,17 @@ acf_add_local_field_group( [
             'wrapper'       => [ 'width' => '50' ],
         ],
         [
+            'key'          => 'field_inscrito_valor_total',
+            'name'         => 'inscrito_valor_total',
+            'label'        => '💲 Valor Total Cobrado (R$)',
+            'type'         => 'number',
+            'min'          => 0,
+            'step'         => '0.01',
+            'prepend'      => 'R$',
+            'instructions' => 'Calculado automaticamente no momento da inscrição (inclui pacote + transporte se aplicável, pelo método de pagamento escolhido).',
+            'wrapper'      => [ 'width' => '50' ],
+        ],
+        [
             'key'           => 'field_inscrito_data_pagamento',
             'name'          => 'inscrito_data_pagamento',
             'label'         => 'Data do Pagamento',
@@ -288,7 +324,29 @@ add_action( 'acf/save_post', function( $post_id ) {
 
 
 // ═══════════════════════════════════════════════════════════════
-// 3. FOTOS DO EVENTO — Status de aprovação e autor
+// 3. PATROCINADORES — Link / URL do patrocinador
+// ═══════════════════════════════════════════════════════════════
+acf_add_local_field_group( [
+    'key'      => 'group_patrocinador_detalhes',
+    'title'    => '🤝 Dados do Patrocinador',
+    'location' => [ [ [ 'param' => 'post_type', 'operator' => '==', 'value' => 'patrocinador' ] ] ],
+    'position' => 'normal',
+    'style'    => 'seamless',
+    'fields'   => [
+        [
+            'key'          => 'field_patrocinador_url',
+            'name'         => 'patrocinador_url',
+            'label'        => '🔗 Site / URL do Patrocinador',
+            'type'         => 'url',
+            'placeholder'  => 'https://www.exemplo.com.br',
+            'instructions' => 'Endereço do site do patrocinador. Ao clicar no logo, o visitante será redirecionado para este link.',
+        ],
+    ],
+] );
+
+
+// ═══════════════════════════════════════════════════════════════
+// 4. FOTOS DO EVENTO — Status de aprovação e autor
 // ═══════════════════════════════════════════════════════════════
 acf_add_local_field_group( [
     'key'      => 'group_foto_evento',
@@ -338,3 +396,77 @@ add_action( 'acf/save_post', function( $post_id ) {
     remove_action( 'acf/save_post', __FUNCTION__ );
     wp_update_post( [ 'ID' => $post_id, 'post_status' => $post_status ] );
 }, 20 );
+
+
+// ═══════════════════════════════════════════════════════════════
+// 5. OFICINEIROS — Status do Mestre e Redes Sociais
+// ═══════════════════════════════════════════════════════════════
+// Registrado via acf/init para garantir que abril_get_social_network_choices()
+// esteja disponível (definida em page-options.php, carregado após meta-boxes.php).
+add_action( 'acf/init', function () {
+    if ( ! function_exists( 'acf_add_local_field_group' ) ) {
+        return;
+    }
+
+    $social_choices = function_exists( 'abril_get_social_network_choices' )
+        ? abril_get_social_network_choices()
+        : [];
+
+    acf_add_local_field_group( [
+        'key'      => 'group_oficineiro_detalhes',
+        'title'    => '🥋 Dados do Oficineiro',
+        'location' => [ [ [ 'param' => 'post_type', 'operator' => '==', 'value' => 'oficineiro' ] ] ],
+        'position' => 'normal',
+        'style'    => 'default',
+        'fields'   => [
+
+            // ── Nome do Grupo ou Escola ────────────────────
+            [
+                'key'          => 'field_oficineiro_grupo_escola',
+                'name'         => 'oficineiro_grupo_escola',
+                'label'        => '🏫 Nome do Grupo ou Escola',
+                'type'         => 'text',
+                'required'     => 0,
+                'placeholder'  => 'Ex: Grupo Capoeira Angola Palmares',
+                'wrapper'      => [ 'width' => '50' ],
+                'instructions' => 'Informe o nome do grupo, escola ou associação de capoeira do oficineiro.',
+            ],
+
+            // ── Repeater: Redes Sociais ────────────────────
+            [
+                'key'          => 'field_oficineiro_redes_sociais',
+                'name'         => 'oficineiro_redes_sociais',
+                'label'        => '🔗 Redes Sociais',
+                'type'         => 'repeater',
+                'instructions' => 'Adicione as redes sociais do oficineiro. O ícone será exibido automaticamente via Font Awesome.',
+                'layout'       => 'row',
+                'button_label' => 'Adicionar Rede Social',
+                'collapsed'    => 'field_oficineiro_rede_social_nome',
+                'sub_fields'   => [
+                    [
+                        'key'        => 'field_oficineiro_rede_social_nome',
+                        'label'      => 'Rede Social',
+                        'name'       => 'rede_social',
+                        'type'       => 'select',
+                        'required'   => 1,
+                        'ui'         => 1,
+                        'allow_null' => 0,
+                        'choices'    => $social_choices,
+                        'wrapper'    => [ 'width' => '40' ],
+                    ],
+                    [
+                        'key'         => 'field_oficineiro_rede_social_url',
+                        'label'       => 'URL da Rede',
+                        'name'        => 'rede_social_url',
+                        'type'        => 'url',
+                        'required'    => 1,
+                        'placeholder' => 'https://...',
+                        'wrapper'     => [ 'width' => '60' ],
+                    ],
+                ],
+            ],
+
+        ],
+    ] );
+} );
+

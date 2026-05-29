@@ -1,0 +1,328 @@
+/* ====================================================
+   SEÇÃO OFICINEIROS — Speakers
+   Projeto: Abril pra Angola
+   Layout: CSS Grid exclusivamente
+   Unidade: rem (base 16px = 1rem)
+   ==================================================== */
+
+/* ── Seção Principal ───────────────────────────────── */
+.section-speakers {
+    padding-block: var(--section-padding-y);
+    background-color: var(--color-neutral-900);
+}
+
+.section-speakers > .container {
+    display: grid;
+    gap: var(--spacing-12);
+}
+
+/* ── Cabeçalho ─────────────────────────────────────── */
+.section-speakers__header {
+    display: grid;
+    gap: var(--spacing-5);
+}
+
+.section-speakers__title {
+    font-size: var(--font-size-2xl);      /* 30px */
+    font-weight: var(--font-weight-bold);
+    color: var(--color-neutral-0);
+    line-height: var(--line-height-tight);
+}
+
+/* Linha decorativa dourada — padrão do projeto */
+.section-speakers__title::after {
+    content: '';
+    display: block;
+    width: 3rem;          /* 48px */
+    height: 0.25rem;      /* 4px  */
+    background-color: var(--color-primary-0);
+    border-radius: var(--radius-full);
+    margin-block-start: var(--spacing-4);
+    margin-inline: 0;
+}
+
+.section-speakers__description {
+    font-size: var(--font-size-md);       /* 18px */
+    color: var(--color-neutral-400);
+    line-height: var(--line-height-relaxed);
+    max-width: 52rem;     /* ~832px */
+}
+
+/* Remove margem extra do editor do WordPress */
+.section-speakers__description > *:last-child {
+    margin-block-end: 0;
+}
+
+/* ── Grade de cards ─────────────────────────────────── */
+.section-speakers__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-6);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* ── Mensagem de estado vazio ───────────────────────── */
+.section-speakers__empty {
+    font-size: var(--font-size-md);
+    color: var(--color-neutral-500);
+    text-align: center;
+    padding-block: var(--spacing-16);
+}
+
+/* ── Card individual ────────────────────────────────── */
+.speaker-card {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    background-color: var(--color-neutral-800);
+    border: var(--border-width-thin) solid rgba(255, 255, 255, 0.07);
+    border-radius: var(--radius-xl);      /* 16px */
+    overflow: hidden;
+    transition:
+        transform var(--transition-base),
+        box-shadow var(--transition-base),
+        border-color var(--transition-base);
+}
+
+.speaker-card:hover {
+    transform: translateY(-0.25rem);      /* -4px */
+    box-shadow: 0 1.25rem 2.5rem rgba(0, 0, 0, 0.45);
+    border-color: var(--color-primary-0);
+}
+
+/* ── Figura / Imagem ────────────────────────────────── */
+.speaker-card__figure {
+    margin: 0;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background-color: var(--color-neutral-700);
+}
+
+.speaker-card__photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    transition: transform var(--transition-slow);
+}
+
+.speaker-card:hover .speaker-card__photo {
+    transform: scale(1.05);
+}
+
+/* Placeholder quando não há imagem definida */
+.speaker-card__photo-placeholder {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    min-height: 15rem;    /* 240px */
+    background-color: var(--color-neutral-700);
+    color: var(--color-neutral-500);
+    font-size: var(--font-size-4xl);      /* 48px */
+}
+
+/* ── Corpo do card ──────────────────────────────────── */
+.speaker-card__body {
+    display: grid;
+    gap: var(--spacing-3);
+    padding: var(--spacing-5) var(--spacing-5) var(--spacing-4);
+    align-content: start;
+}
+
+/* ── Badge de Grupo / Escola ────────────────────────── */
+.speaker-card__group {
+    display: grid;
+    grid-template-columns: 0.875rem 1fr; /* ícone + texto */
+    align-items: start;
+    gap: var(--spacing-2);
+    margin: 0;
+    padding-block-start: var(--spacing-2);
+    border-block-start: var(--border-width-thin) solid rgba(255, 255, 255, 0.08);
+    font-size: var(--font-size-sm);       /* 14px */
+    font-weight: var(--font-weight-medium);
+    color: var(--color-neutral-400);
+    line-height: var(--line-height-snug);
+}
+
+.speaker-card__group i {
+    color: var(--color-primary-0);
+    font-size: var(--font-size-xs);       /* 12px */
+    margin-block-start: 0.1875rem;        /* 3px — alinha com o topo da linha de texto */
+}
+
+/* ── Nome do oficineiro ─────────────────────────────── */
+.speaker-card__name {
+    font-size: var(--font-size-lg);       /* 20px */
+    font-weight: var(--font-weight-bold);
+    color: var(--color-neutral-0);
+    line-height: var(--line-height-snug);
+    margin: 0;
+}
+
+/* ── Footer — Redes Sociais + Botão ────────────────── */
+.speaker-card__footer {
+    display: grid;
+    gap: var(--spacing-4);
+    padding: var(--spacing-4) var(--spacing-5) var(--spacing-5);
+    border-top: var(--border-width-thin) solid rgba(255, 255, 255, 0.06);
+}
+
+/* Grid automático de colunas para os ícones sociais */
+.speaker-card__social {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 2.25rem;   /* 36px */
+    justify-content: start;
+    gap: var(--spacing-2);
+}
+
+.speaker-card__social-link {
+    display: grid;
+    place-items: center;
+    width: 2.25rem;               /* 36px */
+    height: 2.25rem;              /* 36px */
+    border-radius: var(--radius-md);
+    background-color: rgba(255, 255, 255, 0.07);
+    color: var(--color-neutral-400);
+    font-size: var(--font-size-base); /* 16px */
+    text-decoration: none;
+    transition:
+        background-color var(--transition-fast),
+        color var(--transition-fast),
+        transform var(--transition-fast);
+}
+
+.speaker-card__social-link:hover {
+    background-color: var(--color-primary-0);
+    color: var(--color-neutral-900);
+    transform: scale(1.12);
+}
+
+.speaker-card__social-link:focus-visible {
+    outline: var(--border-width-base) solid var(--color-primary-0);
+    outline-offset: 0.125rem;
+}
+
+/* ── Botão Saiba Mais ───────────────────────────────── */
+.speaker-card__more {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: var(--spacing-2);
+    padding: var(--spacing-2) var(--spacing-4);  /* 8px 16px */
+    border-radius: var(--radius-md);
+    font-size: var(--font-size-sm);              /* 14px */
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-neutral-300);
+    text-decoration: none;
+    border: var(--border-width-thin) solid rgba(255, 255, 255, 0.15);
+    background-color: rgba(255, 255, 255, 0.04);
+    transition:
+        background-color var(--transition-fast),
+        border-color var(--transition-fast),
+        color var(--transition-fast);
+}
+
+.speaker-card__more:hover {
+    background-color: var(--color-primary-0);
+    border-color: var(--color-primary-0);
+    color: var(--color-neutral-900);
+}
+
+.speaker-card__more:focus-visible {
+    outline: var(--border-width-base) solid var(--color-primary-0);
+    outline-offset: 0.125rem;
+}
+
+.speaker-card__more i {
+    font-size: var(--font-size-xs);             /* 12px */
+    transition: transform var(--transition-fast);
+}
+
+.speaker-card__more:hover i {
+    transform: translateX(0.25rem);             /* 4px */
+}
+
+/* ── Responsivo: Mobile Landscape / Tablet pequeno (≥ 640px) */
+@media (min-width: 40rem) {
+    .section-speakers__grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* 1 orfão em 2 colunas → largura completa centralizado */
+    .speaker-card:last-child:nth-child(2n + 1) {
+        grid-column: 1 / -1;
+        max-width: calc(50% - var(--spacing-3)); /* mantém mesma largura dos outros */
+        justify-self: center;
+    }
+}
+
+/* ── Responsivo: Tablet (≥ 768px) ────────────────────── */
+@media (min-width: 48rem) {
+    .section-speakers__title {
+        font-size: var(--font-size-3xl);  /* 36px */
+    }
+
+    .section-speakers__grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-8);
+    }
+
+    .speaker-card__name {
+        font-size: var(--font-size-xl);   /* 24px */
+    }
+
+    /* 1 orfão em 2 colunas → centralizado com largura de 1 coluna */
+    .speaker-card:last-child:nth-child(2n + 1) {
+        grid-column: 1 / -1;
+        max-width: calc(50% - var(--spacing-4));
+        justify-self: center;
+    }
+}
+
+/* ── Responsivo: Desktop (≥ 1024px) ──────────────────── */
+@media (min-width: 64rem) {
+    .section-speakers__title {
+        font-size: var(--font-size-4xl);  /* 48px */
+    }
+
+    .section-speakers__grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: var(--spacing-8);
+    }
+
+    /* Reset do orfão de 2 colunas */
+    .speaker-card:last-child:nth-child(2n + 1) {
+        grid-column: auto;
+        max-width: unset;
+        justify-self: auto;
+    }
+
+    /* 1 orfão em 3 colunas → coluna do meio (centro perfeito) */
+    .speaker-card:last-child:nth-child(3n + 1) {
+        grid-column: 2 / 3;
+    }
+}
+
+/* ── Responsivo: Wide Desktop (≥ 1280px) ─────────────── */
+@media (min-width: 80rem) {
+    .section-speakers__grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    /* Reset do orfão de 3 colunas */
+    .speaker-card:last-child:nth-child(3n + 1) {
+        grid-column: auto;
+    }
+
+    /* 1 orfão em 4 colunas → colunas 2 e 3 (centro visual) */
+    .speaker-card:last-child:nth-child(4n + 1) {
+        grid-column: 2 / 4;
+        justify-self: center;
+        width: calc(50% - var(--spacing-4)); /* mesma largura de 1 coluna */
+    }
+}
+

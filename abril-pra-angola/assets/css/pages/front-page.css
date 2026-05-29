@@ -5,5 +5,7 @@
 
 @import '../components/header.css';
 @import '../components/hero-banner.css';
+@import '../components/about-general.css';
+@import '../components/picture-content.css';
 @import '../components/faq.css';
 @import '../components/footer.css';

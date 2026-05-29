@@ -12,6 +12,15 @@ require_once get_template_directory() . '/inc/form-handler.php';
 require_once get_template_directory() . '/inc/subscriber-admin.php';
 require_once get_template_directory() . '/inc/admin-columns.php';
 require_once get_template_directory() . '/inc/page-options.php';
+require_once get_template_directory() . '/inc/svg-support.php';
+require_once get_template_directory() . '/inc/customizer.php';
+
+// Registra 'pkg_id' como query var do WordPress para não conflitar com o CPT 'pacote'
+// Permite usar ?pkg_id=22 para pré-selecionar um pacote na página de inscrição
+add_filter( 'query_vars', function ( array $vars ): array {
+    $vars[] = 'pkg_id';
+    return $vars;
+} );
 
 // ─────────────────────────────────────────────
 // MailHog — Redirecionar e-mails para o servidor

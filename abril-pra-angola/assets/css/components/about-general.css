@@ -1,0 +1,219 @@
+/* ====================================================
+   COMPONENTE — ABOUT GENERAL (Resumo do Evento)
+   CSS Nesting + Grid Layout | Sem Flexbox
+   Breakpoints: lg 1024px | md 768px | sm 480px
+   Base: 16px = 1rem
+   ==================================================== */
+
+/* ── Wrapper externo — background e padding da seção ── */
+.about-general {
+    background-color: var(--color-neutral-900); /* #000 */
+    padding-block: var(--spacing-16);
+    color: var(--color-neutral-0);
+    font-family: var(--font-family-base);
+
+    /* ── Inner grid — todo o conteúdo dentro do container ── */
+    & .about-general__inner {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-areas:
+            "title    title    title"
+            "desc     desc     desc"
+            "location when     cta";
+        gap: var(--spacing-8) var(--spacing-10);
+    }
+
+    /* ── h2 — Edição do Evento ── */
+    & h2 {
+        grid-area: title;
+        color: var(--color-primary-0);           /* #FAB206 */
+        font-size: var(--font-size-4xl);         /* 1.875rem / 30px — mobile */
+        font-weight: var(--font-weight-bold);
+        line-height: var(--line-height-tight);
+        margin: 0;
+
+        /* Linha decorativa — branca, alinhada à esquerda */
+        &::after {
+            content: '';
+            display: block;
+            width: 3rem;
+            height: 0.25rem;
+            background-color: var(--color-neutral-0); /* branco */
+            border-radius: var(--radius-full);
+            margin-block-start: var(--spacing-4);
+            margin-inline: 0;
+        }
+    }
+
+    /* ── .about-general__desc — Introdução (WYSIWYG) ── */
+    & .about-general__desc {
+        grid-area: desc;
+        color: var(--color-neutral-0);
+        font-size: var(--font-size-md);          /* 1.125rem / 18px */
+        line-height: var(--line-height-relaxed);
+
+        & p {
+            margin-block-end: var(--spacing-4);
+
+            &:last-child {
+                margin-block-end: 0;
+            }
+        }
+
+        & strong { font-weight: var(--font-weight-bold); }
+        & em     { font-style: italic; }
+        & a      { color: var(--color-primary-0); text-decoration: underline; }
+    }
+
+    /* ── address — Local do Evento ── */
+    & .about-general__location {
+        grid-area: location;
+        display: grid;
+        gap: var(--spacing-2);
+        font-style: normal;
+        color: var(--color-neutral-0);
+        border-inline-end: var(--border-width-thin) solid var(--color-neutral-700);
+        padding-inline-end: var(--spacing-10);
+
+        & h3 {
+            color: var(--color-neutral-0);
+            font-size: var(--font-size-lg);      /* 1.25rem / 20px */
+            font-weight: var(--font-weight-semibold);
+            line-height: var(--line-height-tight);
+            margin: 0;
+        }
+
+        & .about-general__address {
+            display: block;
+            font-size: var(--font-size-base);    /* 1rem / 16px */
+            font-weight: var(--font-weight-regular);
+            color: var(--color-neutral-300);
+            line-height: var(--line-height-normal);
+        }
+    }
+
+    /* ── .when — Datas do Evento ── */
+    & .about-general__when {
+        grid-area: when;
+        display: grid;
+        gap: var(--spacing-2);
+        color: var(--color-neutral-0);
+        border-inline-end: var(--border-width-thin) solid var(--color-neutral-700);
+        padding-inline-end: var(--spacing-10);
+
+        & .dayWeek {
+            display: block;
+            font-size: var(--font-size-lg);      /* 1.25rem / 20px */
+            font-weight: var(--font-weight-semibold);
+            color: var(--color-neutral-0);
+            line-height: var(--line-height-tight);
+        }
+
+        & .dayEvent {
+            display: block;
+            font-size: var(--font-size-base);    /* 1rem / 16px */
+            font-weight: var(--font-weight-regular);
+            color: var(--color-neutral-300);
+            line-height: var(--line-height-normal);
+        }
+    }
+
+    /* ── Label (Local / Quando) ── */
+    & .about-general__label {
+        display: block;
+        font-size: var(--font-size-xs);          /* 0.75rem / 12px */
+        font-weight: var(--font-weight-semibold);
+        letter-spacing: var(--letter-spacing-wider);
+        text-transform: uppercase;
+        color: var(--color-primary-0);
+        margin-block-end: var(--spacing-1);
+    }
+
+    /* ── CTA — Botão Oficineiros ── */
+    /* Background: --color-primary-0 (#FAB206) | Texto: preto */
+    & .about-general__cta {
+        grid-area: cta;
+        align-self: center;
+        justify-self: start;
+
+        /* Sobrescreve o padrão .btn para usar amarelo + texto preto */
+        background-color: var(--color-primary-0);
+        color: var(--color-neutral-900);
+        border-color: var(--color-primary-0);
+        font-weight: var(--font-weight-bold);
+
+        &:hover,
+        &:focus-visible {
+            background-color: var(--color-primary-300);
+            border-color: var(--color-primary-300);
+            color: var(--color-neutral-900);
+            box-shadow: var(--shadow-md);
+        }
+
+        &:active {
+            background-color: var(--color-primary-400);
+            border-color: var(--color-primary-400);
+            color: var(--color-neutral-900);
+        }
+    }
+
+    /* ── Responsivo: tablet (≤ 1024px) ── */
+    @media (max-width: 1024px) {
+        & h2 { font-size: var(--font-size-3xl); }   /* 2.25rem / 36px */
+
+        & .about-general__inner {
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-areas:
+                "title    title"
+                "desc     desc"
+                "location when"
+                "cta      cta";
+        }
+
+        & .about-general__when {
+            border-inline-end: none;
+            padding-inline-end: 0;
+        }
+
+        & .about-general__cta {
+            justify-self: start;
+        }
+    }
+
+    /* ── Responsivo: mobile (≤ 768px) ── */
+    @media (max-width: 768px) {
+        padding-block: var(--spacing-10);
+
+        & h2 { font-size: var(--font-size-xl); }    /* 1.5rem / 24px */
+
+        & .about-general__inner {
+            grid-template-columns: 1fr;
+            grid-template-areas:
+                "title"
+                "desc"
+                "location"
+                "when"
+                "cta";
+            gap: var(--spacing-6);
+        }
+
+
+        & .about-general__location,
+        & .about-general__when {
+            border-inline-end: none;
+            padding-inline-end: 0;
+            border-block-end: var(--border-width-thin) solid var(--color-neutral-700);
+            padding-block-end: var(--spacing-4);
+        }
+
+        & .about-general__cta {
+            justify-self: stretch;
+            width: 100%;
+        }
+    }
+
+    /* ── Responsivo: extra small (≤ 480px) ── */
+    @media (max-width: 480px) {
+        padding-block: var(--spacing-8);
+    }
+}
