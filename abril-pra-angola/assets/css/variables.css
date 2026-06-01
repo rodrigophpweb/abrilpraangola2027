@@ -227,6 +227,7 @@
 
 html {
     scroll-behavior: smooth;
+    scroll-paddding-top: 15rem;
     -webkit-text-size-adjust: 100%;
 }
 
@@ -300,6 +301,7 @@ select {
    Garante que as seções não fiquem escondidas atrás do header
 ──────────────────────────────────────────────────── */
 #sobre,
+#programacao,
 #oficineiros,
 #ingressos,
 #localizacao,

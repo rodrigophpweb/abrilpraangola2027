@@ -1,7 +1,13 @@
 <footer>
     <nav>
-        <h6>Todos os direitos reservados - Abril pra Angola 2024</h6>
-        <small>Desenvolvido por: <a href="https://programadorweb.com.br" class="footer-link" target="_blank" rel="noopener noreferrer">Programador Web</a></small>
+        <?php
+        $edicao_evento = function_exists( 'get_field' )
+            ? get_field( 'edicao_evento', 'option' )
+            : '';
+        $edicao_evento = ! empty( $edicao_evento ) ? $edicao_evento : 'Abril pra Angola';
+        ?>
+        <h6><?php echo esc_html__( 'Todos os direitos reservados', 'abril-pra-angola' ); ?> - <?php echo esc_html( $edicao_evento ); ?></h6>
+        <small><?php esc_html_e( 'Desenvolvido por:', 'abril-pra-angola' ); ?> <a href="https://programadorweb.com.br" class="footer-link" target="_blank" rel="noopener noreferrer">Programador Web</a></small>
     </nav>
 
     <?php
@@ -29,4 +35,3 @@
 <?php wp_footer(); ?>
 </body>
 </html>
-

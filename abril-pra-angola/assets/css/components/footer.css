@@ -5,9 +5,46 @@ footer {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+        align-items: center;
     }
     small, h6 {
         color: var(--color-neutral-0);
+    }
+}
+
+/* ── Link "Desenvolvido por" ───────────────────────────── */
+.footer-link {
+    color: var(--color-primary-0);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    text-decoration-color: color-mix(in srgb, var(--color-primary-0) 50%, transparent);
+    font-weight: var(--font-weight-semibold);
+    -webkit-tap-highlight-color: transparent;
+    transition:
+        color var(--transition-fast),
+        text-decoration-color var(--transition-fast);
+}
+
+.footer-link:hover,
+.footer-link:focus-visible {
+    color: var(--color-primary-300);
+    text-decoration-color: var(--color-primary-300);
+}
+
+.footer-link:active {
+    color: var(--color-primary-300);
+    text-decoration-color: var(--color-primary-300);
+}
+
+/* ── Responsivo: Mobile (< 768px) ─────────────────────── */
+@media (max-width: 47.9375rem) {
+    footer {
+        padding: var(--spacing-8) var(--spacing-4);
+        nav {
+            flex-direction: column;
+            gap: var(--spacing-3);
+            text-align: center;
+        }
     }
 }
 

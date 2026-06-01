@@ -100,6 +100,14 @@ function abril_enqueue_styles_and_scripts() {
         $version
     );
 
+    // Agenda — Grade de programação
+    wp_enqueue_style(
+        'abril-schedule',
+        $components_uri . 'section-schedule.css',
+        [ 'abril-variables', 'abril-buttons' ],
+        $version
+    );
+
     // Seção Ingressos — cards de pacotes na home
     wp_enqueue_style(
         'abril-section-tickets',

@@ -569,6 +569,36 @@ function abril_register_theme_options_fields(): void {
                 'delay'        => 0,
                 'wrapper'      => [ 'width' => '100' ],
             ],
+
+            // ── Aba: Agenda ───────────────────────────────
+            [
+                'key'       => 'field_abril_tab_agenda',
+                'label'     => 'Agenda',
+                'name'      => '',
+                'type'      => 'tab',
+                'placement' => 'top',
+            ],
+            [
+                'key'          => 'field_abril_agenda_titulo',
+                'label'        => 'Título da Seção',
+                'name'         => 'agenda_titulo',
+                'type'         => 'text',
+                'instructions' => 'Título principal da seção de agenda/programação do evento.',
+                'placeholder'  => 'Ex: Programação do Evento',
+                'wrapper'      => [ 'width' => '100' ],
+            ],
+            [
+                'key'          => 'field_abril_agenda_descricao',
+                'label'        => 'Descrição da Seção',
+                'name'         => 'agenda_descricao',
+                'type'         => 'wysiwyg',
+                'instructions' => 'Texto introdutório da seção de agenda, exibido abaixo do título.',
+                'tabs'         => 'all',
+                'toolbar'      => 'basic',
+                'media_upload' => 0,
+                'delay'        => 0,
+                'wrapper'      => [ 'width' => '100' ],
+            ],
         ],
         'location'              => [
             [
@@ -762,6 +792,22 @@ function abril_get_oficineiros_options(): array {
     return [
         'oficineiros_titulo'    => get_field( 'oficineiros_titulo', 'option' )    ?: __( 'Oficineiros do Evento', 'abril-pra-angola' ),
         'oficineiros_descricao' => get_field( 'oficineiros_descricao', 'option' ) ?: '',
+    ];
+}
+
+/**
+ * Retorna as configurações da seção de Agenda.
+ *
+ * @return array<string, string>
+ */
+function abril_get_agenda_options(): array {
+    if ( ! function_exists( 'get_field' ) ) {
+        return [];
+    }
+
+    return [
+        'agenda_titulo'    => get_field( 'agenda_titulo', 'option' )    ?: __( 'Programação', 'abril-pra-angola' ),
+        'agenda_descricao' => get_field( 'agenda_descricao', 'option' ) ?: '',
     ];
 }
 

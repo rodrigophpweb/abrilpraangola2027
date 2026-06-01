@@ -547,9 +547,8 @@
 
 /* ────────────────────────────────────────────────────
    CAROUSEL DE PATROCINADORES
-   Navegação por setas e bullets com acessibilidade.
-   4 patrocinadores por página.
-   Setas e paginador visíveis apenas quando > 4 sponsors.
+   Navegação responsiva: 2 por slide no mobile, 4 no desktop.
+   Suporte a setas, bullets, teclado e swipe.
 ──────────────────────────────────────────────────── */
 ( function () {
     'use strict';
@@ -557,81 +556,166 @@
     const carousel = document.querySelector( '.sponsors-carousel' );
     if ( ! carousel ) return;
 
-    const track      = carousel.querySelector( '.sponsors-carousel__track' );
-    const slides     = Array.from( carousel.querySelectorAll( '.sponsors-carousel__slide' ) );
-    const btnPrev    = carousel.querySelector( '.sponsors-carousel__btn--prev' );
-    const btnNext    = carousel.querySelector( '.sponsors-carousel__btn--next' );
-    const container  = carousel.parentElement; // .container
-    const nav        = container ? container.querySelector( '.sponsors-carousel__nav' ) : null;
-    const bullets    = nav ? Array.from( nav.querySelectorAll( '.sponsors-carousel__bullet' ) ) : [];
-    const totalPages = slides.length;
+    // ── Coleta todos os sponsor-item independente do agrupamento PHP ──
+    const allItems      = Array.from( carousel.querySelectorAll( '.sponsor-item' ) );
+    if ( allItems.length === 0 ) return;
 
-    // Nenhuma navegação necessária com 1 página
-    if ( totalPages <= 1 ) return;
+    const perPageDesktop = parseInt( carousel.dataset.perPage, 10 )       || 4;
+    const perPageMobile  = parseInt( carousel.dataset.perPageMobile, 10 ) || 2;
+    const mobileBreak    = 768; // px
 
-    let currentPage = 0; // índice 0-based
+    const track    = carousel.querySelector( '.sponsors-carousel__track' );
+    const btnPrev  = carousel.querySelector( '.sponsors-carousel__btn--prev' );
+    const btnNext  = carousel.querySelector( '.sponsors-carousel__btn--next' );
+    const navEl    = carousel.parentElement
+                        ? carousel.parentElement.querySelector( '.sponsors-carousel__nav' )
+                        : null;
+    const bulletsContainer = navEl
+                        ? navEl.querySelector( '.sponsors-carousel__bullets' )
+                        : null;
 
-    // ── Mover para uma página específica ──────────────
+    let currentPage = 0;
+    let lastPerPage = null;
+    let slidesArr   = [];
+    let bulletsArr  = [];
+
+    function getPerPage() {
+        return window.innerWidth < mobileBreak ? perPageMobile : perPageDesktop;
+    }
+
+    // ── Reconstrói os slides no DOM com novo per-page ──────────────
+    function buildSlides( perPage ) {
+        track.innerHTML = '';
+        slidesArr = [];
+
+        const totalPages = Math.ceil( allItems.length / perPage );
+
+        for ( let p = 0; p < totalPages; p++ ) {
+            const slide = document.createElement( 'li' );
+            slide.className = 'sponsors-carousel__slide' + ( p === 0 ? ' is-active' : '' );
+            slide.setAttribute( 'role', 'group' );
+            slide.setAttribute( 'aria-roledescription', 'slide' );
+            slide.setAttribute( 'aria-label', 'Página ' + ( p + 1 ) + ' de ' + totalPages );
+            slide.setAttribute( 'data-page', String( p + 1 ) );
+            slide.setAttribute( 'aria-hidden', p === 0 ? 'false' : 'true' );
+
+            const group = document.createElement( 'ul' );
+            group.className = 'sponsors-carousel__group';
+            group.setAttribute( 'role', 'list' );
+
+            const start = p * perPage;
+            const end   = Math.min( start + perPage, allItems.length );
+            for ( let i = start; i < end; i++ ) {
+                group.appendChild( allItems[ i ] );
+            }
+
+            slide.appendChild( group );
+            track.appendChild( slide );
+            slidesArr.push( slide );
+        }
+
+        return totalPages;
+    }
+
+    // ── Reconstrói os bullets ─────────────────────────────────────
+    function buildBullets( totalPages ) {
+        if ( ! bulletsContainer ) return;
+        bulletsContainer.innerHTML = '';
+        bulletsArr = [];
+
+        const showNav = totalPages > 1;
+        if ( navEl ) navEl.style.display = showNav ? '' : 'none';
+        if ( btnPrev ) btnPrev.style.display = showNav ? '' : 'none';
+        if ( btnNext ) btnNext.style.display = showNav ? '' : 'none';
+
+        if ( ! showNav ) return;
+
+        for ( let p = 0; p < totalPages; p++ ) {
+            const li  = document.createElement( 'li' );
+            li.className = 'sponsors-carousel__bullet-item';
+            li.setAttribute( 'role', 'listitem' );
+
+            const btn = document.createElement( 'button' );
+            btn.className = 'sponsors-carousel__bullet' + ( p === 0 ? ' is-active' : '' );
+            btn.type = 'button';
+            btn.setAttribute( 'data-page', String( p + 1 ) );
+            btn.setAttribute( 'aria-label', 'Ir para página ' + ( p + 1 ) );
+            btn.setAttribute( 'aria-current', p === 0 ? 'true' : 'false' );
+
+            ( function ( pageIndex ) {
+                btn.addEventListener( 'click', function () {
+                    goToPage( pageIndex );
+                } );
+            } )( p );
+
+            li.appendChild( btn );
+            bulletsContainer.appendChild( li );
+            bulletsArr.push( btn );
+        }
+    }
+
+    // ── Navega para uma página ────────────────────────────────────
     function goToPage( page ) {
-        // Limita ao intervalo válido
-        page = Math.max( 0, Math.min( page, totalPages - 1 ) );
+        const total = slidesArr.length;
+        page = Math.max( 0, Math.min( page, total - 1 ) );
         currentPage = page;
 
-        // Desloca o track via translateX
         track.style.transform = 'translateX( -' + ( page * 100 ) + '% )';
 
-        // ── Atualiza slides ────────────────────────────
-        slides.forEach( function ( slide, i ) {
-            const isActive = i === page;
-            slide.classList.toggle( 'is-active', isActive );
-            slide.setAttribute( 'aria-hidden', isActive ? 'false' : 'true' );
+        slidesArr.forEach( function ( slide, i ) {
+            const active = i === page;
+            slide.classList.toggle( 'is-active', active );
+            slide.setAttribute( 'aria-hidden', active ? 'false' : 'true' );
         } );
 
-        // ── Atualiza bullets ───────────────────────────
-        bullets.forEach( function ( bullet, i ) {
-            const isActive = i === page;
-            bullet.classList.toggle( 'is-active', isActive );
-            bullet.setAttribute( 'aria-current', isActive ? 'true' : 'false' );
+        bulletsArr.forEach( function ( bullet, i ) {
+            const active = i === page;
+            bullet.classList.toggle( 'is-active', active );
+            bullet.setAttribute( 'aria-current', active ? 'true' : 'false' );
         } );
 
-        // ── Atualiza setas ─────────────────────────────
         if ( btnPrev ) {
             btnPrev.disabled = page === 0;
             btnPrev.classList.toggle( 'is-disabled', page === 0 );
         }
         if ( btnNext ) {
-            btnNext.disabled = page === totalPages - 1;
-            btnNext.classList.toggle( 'is-disabled', page === totalPages - 1 );
+            btnNext.disabled = page === total - 1;
+            btnNext.classList.toggle( 'is-disabled', page === total - 1 );
         }
     }
 
-    // ── Listeners das setas ───────────────────────────
+    // ── Inicializa / reinicializa o carousel ──────────────────────
+    function init() {
+        const perPage = getPerPage();
+        if ( perPage === lastPerPage ) return; // nada mudou
+        lastPerPage = perPage;
+        currentPage = 0;
+
+        track.style.transform = 'translateX( 0 )';
+        const totalPages = buildSlides( perPage );
+        buildBullets( totalPages );
+        goToPage( 0 );
+    }
+
+    // ── Setas prev / next ─────────────────────────────────────────
     if ( btnPrev ) {
         btnPrev.addEventListener( 'click', function () {
             goToPage( currentPage - 1 );
         } );
     }
-
     if ( btnNext ) {
         btnNext.addEventListener( 'click', function () {
             goToPage( currentPage + 1 );
         } );
     }
 
-    // ── Listeners dos bullets ─────────────────────────
-    bullets.forEach( function ( bullet, i ) {
-        bullet.addEventListener( 'click', function () {
-            goToPage( i );
-        } );
-    } );
-
-    // ── Navegação por teclado (←/→) ──────────────────
+    // ── Teclado (←/→) ────────────────────────────────────────────
     carousel.addEventListener( 'keydown', function ( e ) {
         if ( e.key === 'ArrowLeft' )  goToPage( currentPage - 1 );
         if ( e.key === 'ArrowRight' ) goToPage( currentPage + 1 );
     } );
 
-    // ── Suporte a swipe (touch) ───────────────────────
+    // ── Swipe (touch) ─────────────────────────────────────────────
     let touchStartX = 0;
 
     carousel.addEventListener( 'touchstart', function ( e ) {
@@ -640,16 +724,20 @@
 
     carousel.addEventListener( 'touchend', function ( e ) {
         const delta = touchStartX - e.changedTouches[ 0 ].clientX;
-        if ( Math.abs( delta ) < 50 ) return; // ignora swipes curtos
-        if ( delta > 0 ) {
-            goToPage( currentPage + 1 ); // swipe para esquerda → próxima
-        } else {
-            goToPage( currentPage - 1 ); // swipe para direita → anterior
-        }
+        if ( Math.abs( delta ) < 50 ) return;
+        if ( delta > 0 ) goToPage( currentPage + 1 );
+        else             goToPage( currentPage - 1 );
     }, { passive: true } );
 
-    // ── Estado inicial ────────────────────────────────
-    goToPage( 0 );
+    // ── Resize: reinicializa se cruzar o breakpoint ───────────────
+    let resizeTimer;
+    window.addEventListener( 'resize', function () {
+        clearTimeout( resizeTimer );
+        resizeTimer = setTimeout( init, 150 );
+    } );
+
+    // ── Estado inicial ────────────────────────────────────────────
+    init();
 
 } )();
 

@@ -242,6 +242,13 @@ $status_inscricao = $inscrito ? get_field( 'inscrito_status', $inscrito->ID ) : 
         <?php endif; ?>
 
     </div>
+    <?php
+        get_template_part( 'template-parts/section-schedule' );
+        get_template_part( 'template-parts/section', 'speakers' );
+        get_template_part( 'template-parts/section-location' );
+        get_template_part( 'template-parts/section', 'sponsors' );
+        get_template_part( 'template-parts/faq' );
+    ?>
 </main>
 
 <?php get_footer(); ?>

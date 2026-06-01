@@ -1,0 +1,233 @@
+/* ====================================================
+   SEÇÃO AGENDA — Schedule / Programação
+   Projeto: Abril pra Angola
+   Layout: CSS Grid exclusivamente | Sem Flexbox
+   Unidade: rem (base 16px = 1rem)
+   ==================================================== */
+
+/* ── Seção Principal ───────────────────────────────── */
+.section-schedule {
+    padding-block: var(--section-padding-y);
+    background-color: var(--color-secondary-900);
+}
+
+.section-schedule > .container {
+    display: grid;
+    gap: var(--spacing-12);
+}
+
+/* ── Cabeçalho ─────────────────────────────────────── */
+.section-schedule__header {
+    display: grid;
+    gap: var(--spacing-5);
+}
+
+.section-schedule__title {
+    font-size: var(--font-size-2xl);      /* 30px */
+    font-weight: var(--font-weight-bold);
+    color: var(--color-neutral-0);
+    line-height: var(--line-height-tight);
+}
+
+/* Linha decorativa dourada — padrão do projeto */
+.section-schedule__title::after {
+    content: '';
+    display: block;
+    width: 3rem;          /* 48px */
+    height: 0.25rem;      /* 4px  */
+    background-color: var(--color-primary-0);
+    border-radius: var(--radius-full);
+    margin-block-start: var(--spacing-4);
+    margin-inline: 0;
+}
+
+.section-schedule__description {
+    font-size: var(--font-size-md);       /* 18px */
+    color: var(--color-neutral-400);
+    line-height: var(--line-height-relaxed);
+    max-width: 52rem;     /* ~832px */
+}
+
+/* Remove margem extra do editor do WordPress */
+.section-schedule__description > *:last-child {
+    margin-block-end: 0;
+}
+
+/* ── Grade de cards — 1 coluna (mobile) / 2 colunas (tablet+) */
+.section-schedule__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-6);
+}
+
+/* ── Estado vazio ───────────────────────────────────── */
+.section-schedule__empty {
+    display: grid;
+    justify-items: center;
+    gap: var(--spacing-4);
+    padding-block: var(--spacing-16);    /* 64px */
+    text-align: center;
+}
+
+.section-schedule__empty-icon {
+    font-size: var(--font-size-4xl);     /* 48px */
+    color: var(--color-secondary-700);
+    margin: 0;
+}
+
+.section-schedule__empty-text {
+    font-size: var(--font-size-md);      /* 18px */
+    color: var(--color-neutral-100);
+    line-height: var(--line-height-relaxed);
+    margin: 0;
+}
+
+/* ── Card individual da Agenda ──────────────────────── */
+.schedule-card {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    background-color: var(--color-secondary-800);
+    border: var(--border-width-thin) solid rgba(255, 255, 255, 0.07);
+    border-radius: var(--radius-xl);     /* 16px */
+    overflow: hidden;
+    transition:
+        transform var(--transition-base),
+        box-shadow var(--transition-base),
+        border-color var(--transition-base);
+}
+
+.schedule-card:hover {
+    transform: translateY(-0.25rem);     /* -4px */
+    box-shadow: 0 1.25rem 2.5rem rgba(0, 0, 0, 0.45);
+    border-color: var(--color-primary-0);
+}
+
+/* ── Cabeçalho do Card ──────────────────────────────── */
+.schedule-card__header {
+    display: grid;
+    gap: var(--spacing-2);
+    padding: var(--spacing-5) var(--spacing-6);
+    background-color: rgba(255, 255, 255, 0.04);
+    border-block-end: var(--border-width-thin) solid rgba(255, 255, 255, 0.08);
+}
+
+/* ── Tag <time> — Termo + Título (label semântico) ── */
+.schedule-card__time {
+    display: block;
+    font-size: var(--font-size-sm);      /* 14px */
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-primary-0);
+    letter-spacing: var(--letter-spacing-wide);
+    text-transform: uppercase;
+    line-height: var(--line-height-snug);
+}
+
+/* ── H3 — Título da atividade (hierarquia de headings) */
+.schedule-card__title {
+    font-size: var(--font-size-lg);      /* 20px */
+    font-weight: var(--font-weight-bold);
+    color: var(--color-neutral-0);
+    line-height: var(--line-height-snug);
+    margin: 0;
+}
+
+/* ── Conteúdo: apenas <ul> e <a> ────────────────────── */
+.schedule-card__content {
+    padding: var(--spacing-5) var(--spacing-6);
+}
+
+/* Lista não ordenada */
+.schedule-card__content ul {
+    display: grid;
+    gap: var(--spacing-2);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Item de lista com bullet dourado via grid */
+.schedule-card__content li {
+    display: grid;
+    grid-template-columns: 0.75rem 1fr; /* bullet + texto */
+    gap: var(--spacing-3);
+    align-items: start;
+    font-size: var(--font-size-base);   /* 16px */
+    color: var(--color-neutral-300);
+    line-height: var(--line-height-relaxed);
+}
+
+/* Bullet decorativo dourado */
+.schedule-card__content li::before {
+    content: '';
+    display: block;
+    width: 0.375rem;     /* 6px */
+    height: 0.375rem;    /* 6px */
+    border-radius: var(--radius-full);
+    background-color: var(--color-primary-0);
+    margin-block-start: 0.5625rem;      /* alinha verticalmente com a 1ª linha de texto */
+    justify-self: center;
+}
+
+/* Links dentro do conteúdo */
+.schedule-card__content a {
+    color: var(--color-primary-300);
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+    text-decoration-thickness: 1px;
+    transition: color var(--transition-fast);
+}
+
+.schedule-card__content a:hover {
+    color: var(--color-primary-0);
+}
+
+.schedule-card__content a:focus-visible {
+    outline: var(--border-width-base) solid var(--color-primary-0);
+    outline-offset: 0.125rem;
+    border-radius: var(--radius-sm);
+}
+
+/* ── Rodapé do Card — Botão CTA ─────────────────────── */
+.schedule-card__footer {
+    padding: var(--spacing-5) var(--spacing-6);
+    border-block-start: var(--border-width-thin) solid rgba(255, 255, 255, 0.06);
+}
+
+/* ── Responsivo: Tablet pequeno (≥ 640px) ─────────────*/
+@media (min-width: 40rem) {
+    .section-schedule__grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ── Responsivo: Tablet (≥ 768px) ────────────────────── */
+@media (min-width: 48rem) {
+    .section-schedule__title {
+        font-size: var(--font-size-3xl);  /* 36px */
+    }
+
+    .section-schedule__grid {
+        gap: var(--spacing-8);            /* 32px */
+    }
+
+    .schedule-card__title {
+        font-size: var(--font-size-xl);   /* 24px */
+    }
+}
+
+/* ── Responsivo: Desktop (≥ 1024px) ──────────────────── */
+@media (min-width: 64rem) {
+    .section-schedule__title {
+        font-size: var(--font-size-4xl);  /* 48px */
+    }
+}
+
+/* ── Acessibilidade: movimento reduzido ─────────────── */
+@media (prefers-reduced-motion: reduce) {
+    .schedule-card {
+        transition: none;
+
+        &:hover { transform: none; }
+    }
+}
+

@@ -49,6 +49,7 @@ $show_nav    = $total > $per_page;
             role="region"
             aria-label="<?php esc_attr_e( 'Carrossel de patrocinadores', 'abril-pra-angola' ); ?>"
             data-per-page="<?php echo esc_attr( $per_page ); ?>"
+            data-per-page-mobile="2"
             data-total-pages="<?php echo esc_attr( $total_pages ); ?>"
         >
 

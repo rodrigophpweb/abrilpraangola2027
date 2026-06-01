@@ -280,6 +280,13 @@ $pacote_preselect = intval( get_query_var( 'pkg_id', $_GET['pkg_id'] ?? 0 ) );
 
     </div><!-- .container -->
 
+    <?php
+        get_template_part( 'template-parts/section-schedule' );
+        get_template_part( 'template-parts/section', 'speakers' );
+        get_template_part( 'template-parts/section-location' );
+        get_template_part( 'template-parts/section', 'sponsors' );
+        get_template_part( 'template-parts/faq' );
+    ?>
 </main>
 
 
