@@ -130,13 +130,13 @@
     }
 
     /* ── CTA — Botão Oficineiros ── */
-    /* Background: --color-primary-0 (#FAB206) | Texto: preto */
+    /* Herda efeito shine de .btn-primary; ajustes de cor e posição */
     & .about-general__cta {
         grid-area: cta;
         align-self: center;
         justify-self: start;
 
-        /* Sobrescreve o padrão .btn para usar amarelo + texto preto */
+        /* Mantém amarelo + texto preto (sobrescreve o branco do btn-primary hover) */
         background-color: var(--color-primary-0);
         color: var(--color-neutral-900);
         border-color: var(--color-primary-0);
@@ -144,16 +144,17 @@
 
         &:hover,
         &:focus-visible {
-            background-color: var(--color-primary-300);
-            border-color: var(--color-primary-300);
+            background-color: var(--color-primary-0);
+            border-color: var(--color-primary-0);
             color: var(--color-neutral-900);
-            box-shadow: var(--shadow-md);
+            box-shadow: 0 1rem 2.25rem rgba(229, 114, 10, 0.35); /* glow laranja = btn-primary */
         }
 
         &:active {
             background-color: var(--color-primary-400);
             border-color: var(--color-primary-400);
             color: var(--color-neutral-900);
+            transform: translateY(0) scale(1);
         }
     }
 

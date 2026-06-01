@@ -24,9 +24,9 @@
 
     /* ── Primário — laranja com efeito shine ── */
     &.btn-primary {
-        background-color: var(--color-primary-500);
-        color: var(--color-neutral-0);
-        border-color: var(--color-primary-500);
+        background-color: var(--color-primary-0);
+        color: var(--color-neutral-900);
+        border-color: var(--color-primary-0);
 
         /* Faixa de brilho — animada no hover */
         &::after {
@@ -47,8 +47,8 @@
         }
 
         &:hover {
-            background-color: var(--color-primary-600);
-            border-color: var(--color-primary-600);
+            background-color: var(--color-primary-0);
+            border-color: var(--color-primary-0);
             color: var(--color-neutral-0);
             box-shadow: 0 1rem 2.25rem rgba(229, 114, 10, 0.35);
             transform: translateY(-0.25rem) scale(1.04);
@@ -59,8 +59,8 @@
         }
 
         &:active {
-            background-color: var(--color-primary-700);
-            border-color: var(--color-primary-700);
+            background-color: var(--color-primary-0);
+            border-color: var(--color-primary-0);
             transform: translateY(0) scale(1);
         }
 
@@ -120,8 +120,8 @@
     /* ── Fantasma / Outline ── */
     &.btn-outline {
         background-color: transparent;
-        color: var(--color-primary-600);
-        border-color: var(--color-primary-500);
+        color: var(--color-primary-0);
+        border-color: var(--color-primary-0);
 
         &:hover {
             background-color: var(--color-primary-100);

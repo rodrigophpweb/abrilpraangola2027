@@ -195,7 +195,7 @@ if ( $local ) {
 
             <a
                 href="<?php echo $oficineiros_url; ?>"
-                class="btn about-general__cta"
+                class="btn btn-primary about-general__cta"
                 aria-label="<?php esc_attr_e( 'Conheça nossos oficineiros', 'abril-pra-angola' ); ?>"
             ><?php esc_html_e( 'Oficineiros', 'abril-pra-angola' ); ?></a>
 

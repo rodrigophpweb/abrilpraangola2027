@@ -220,16 +220,49 @@
     text-decoration: none;
     border: var(--border-width-thin) solid rgba(255, 255, 255, 0.15);
     background-color: rgba(255, 255, 255, 0.04);
+    position: relative;                          /* âncora para o ::after shine */
+    overflow: hidden;                            /* recorta o brilho */
     transition:
         background-color var(--transition-fast),
         border-color var(--transition-fast),
-        color var(--transition-fast);
+        color var(--transition-fast),
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast);
+}
+
+/* Faixa de brilho — idêntica ao btn-primary */
+.speaker-card__more::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -80%;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255, 255, 255, 0.45),
+        transparent
+    );
+    transform: skewX(-20deg);
+    pointer-events: none;
 }
 
 .speaker-card__more:hover {
     background-color: var(--color-primary-0);
     border-color: var(--color-primary-0);
     color: var(--color-neutral-900);
+    transform: translateY(-0.25rem) scale(1.04);
+    box-shadow: 0 1rem 2.25rem rgba(229, 114, 10, 0.35);
+}
+
+.speaker-card__more:hover::after {
+    animation: speakerBtnShine 0.8s ease;
+}
+
+.speaker-card__more:active {
+    transform: translateY(0) scale(1);
+    box-shadow: none;
 }
 
 .speaker-card__more:focus-visible {
@@ -244,6 +277,22 @@
 
 .speaker-card__more:hover i {
     transform: translateX(0.25rem);             /* 4px */
+}
+
+/* Animação de brilho — local para não depender de button.css */
+@keyframes speakerBtnShine {
+    from { left: -80%; }
+    to   { left: 140%; }
+}
+
+/* Respeita preferência de movimento reduzido */
+@media (prefers-reduced-motion: reduce) {
+    .speaker-card__more {
+        transition: none;
+
+        &::after  { display: none; }
+        &:hover   { transform: none; }
+    }
 }
 
 /* ── Responsivo: Mobile Landscape / Tablet pequeno (≥ 640px) */
