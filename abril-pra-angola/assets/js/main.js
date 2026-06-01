@@ -32,6 +32,21 @@
         window.scrollTo( { top: Math.max( 0, offsetTop ), behavior: 'smooth' } );
     }
 
+    // ── Força o header a aparecer durante scroll por âncora ──
+    // Sinaliza ao módulo do header para não esconder enquanto
+    // o scroll suave por âncora estiver em andamento.
+    function lockHeaderVisible( duration ) {
+        window._abrilAnchorScrolling = true;
+        const siteHeader = document.querySelector( '.site-header' );
+        if ( siteHeader ) {
+            siteHeader.classList.remove( 'is-hidden' );
+        }
+        clearTimeout( window._abrilAnchorScrollingTimer );
+        window._abrilAnchorScrollingTimer = setTimeout( function () {
+            window._abrilAnchorScrolling = false;
+        }, duration || 1000 );
+    }
+
     // ── Intercepta cliques nos itens do menu ─────────────
     document.querySelectorAll( '.site-nav__list a[href*="#"]' ).forEach( function ( link ) {
         link.addEventListener( 'click', function ( e ) {
@@ -39,7 +54,7 @@
             const hashIndex = href.indexOf( '#' );
             if ( hashIndex === -1 ) return;
 
-            const hash    = href.slice( hashIndex + 1 );
+            const hash     = href.slice( hashIndex + 1 );
             const basePath = href.slice( 0, hashIndex ); // pode ser '', '/', ou URL completa
 
             // Verifica se a âncora pertence à página atual
@@ -54,9 +69,13 @@
             if ( ! linkIsLocal ) return; // deixa o browser navegar para outra página
 
             const target = document.getElementById( hash );
-            if ( ! target ) return;
+            if ( ! target ) return; // elemento não existe nesta página → browser navega
 
             e.preventDefault();
+
+            // Mantém o header visível durante todo o scroll suave
+            lockHeaderVisible( 1000 );
+
             scrollToAnchor( target );
 
             // Atualiza o hash na URL sem recarregar
@@ -75,6 +94,7 @@
         if ( ! target ) return;
         // Pequeno delay para garantir que o layout está pronto
         setTimeout( function () {
+            lockHeaderVisible( 1200 );
             scrollToAnchor( target );
         }, 350 );
     }
@@ -100,6 +120,14 @@
 
         // Adiciona sombra ao sair do topo
         header.classList.toggle( 'is-scrolled', currentScrollY > 10 );
+
+        // Durante scroll por âncora: mantém o header visível
+        if ( window._abrilAnchorScrolling ) {
+            header.classList.remove( 'is-hidden' );
+            lastScrollY = currentScrollY;
+            ticking     = false;
+            return;
+        }
 
         // Esconde ao descer, mostra ao subir
         if ( currentScrollY > lastScrollY && currentScrollY > 182 ) {
