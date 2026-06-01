@@ -6,6 +6,8 @@
 .btn {
     display: inline-grid;
     place-items: center;
+    position: relative;          /* necessário para o efeito ::after shine */
+    overflow: hidden;            /* recorta o brilho dentro do botão       */
     padding: var(--spacing-3) var(--spacing-6);
     border-radius: var(--radius-md);
     font-size: var(--font-size-base);
@@ -16,44 +18,102 @@
     text-decoration: none;
     transition: background-color var(--transition-fast),
                 border-color var(--transition-fast),
-                box-shadow var(--transition-fast);
+                box-shadow var(--transition-fast),
+                transform var(--transition-fast);
     letter-spacing: var(--letter-spacing-wide);
 
-    /* ── Primário — laranja ── */
+    /* ── Primário — laranja com efeito shine ── */
     &.btn-primary {
         background-color: var(--color-primary-500);
         color: var(--color-neutral-0);
         border-color: var(--color-primary-500);
 
+        /* Faixa de brilho — animada no hover */
+        &::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -80%;
+            width: 40%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.45),
+                transparent
+            );
+            transform: skewX(-20deg);
+            pointer-events: none;
+        }
+
         &:hover {
             background-color: var(--color-primary-600);
             border-color: var(--color-primary-600);
             color: var(--color-neutral-0);
-            box-shadow: var(--shadow-md);
+            box-shadow: 0 1rem 2.25rem rgba(229, 114, 10, 0.35);
+            transform: translateY(-0.25rem) scale(1.04);
+        }
+
+        &:hover::after {
+            animation: btnShine 0.8s ease;
         }
 
         &:active {
             background-color: var(--color-primary-700);
             border-color: var(--color-primary-700);
+            transform: translateY(0) scale(1);
+        }
+
+        &:focus-visible {
+            outline: 3px solid var(--color-primary-300);
+            outline-offset: 3px;
         }
     }
 
-    /* ── Secundário — azul ── */
+    /* ── Secundário — azul com efeito shine ── */
     &.btn-secondary {
         background-color: var(--color-secondary-500);
         color: var(--color-neutral-0);
         border-color: var(--color-secondary-500);
 
+        &::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -80%;
+            width: 40%;
+            height: 100%;
+            background: linear-gradient(
+                120deg,
+                transparent,
+                rgba(255, 255, 255, 0.35),
+                transparent
+            );
+            transform: skewX(-20deg);
+            pointer-events: none;
+        }
+
         &:hover {
             background-color: var(--color-secondary-600);
             border-color: var(--color-secondary-600);
             color: var(--color-neutral-0);
-            box-shadow: var(--shadow-md);
+            box-shadow: 0 1rem 2.25rem rgba(26, 114, 170, 0.35);
+            transform: translateY(-0.25rem) scale(1.04);
+        }
+
+        &:hover::after {
+            animation: btnShine 0.8s ease;
         }
 
         &:active {
             background-color: var(--color-secondary-700);
             border-color: var(--color-secondary-700);
+            transform: translateY(0) scale(1);
+        }
+
+        &:focus-visible {
+            outline: 3px solid var(--color-secondary-300);
+            outline-offset: 3px;
         }
     }
 
@@ -100,7 +160,7 @@
         width: 100%;
     }
 
-    /* ── Estado desactivado ── */
+    /* ── Estado desativado ── */
     &:disabled,
     &[aria-disabled="true"] {
         opacity: 0.5;
@@ -109,3 +169,18 @@
     }
 }
 
+/* ── Animação de brilho deslizante — compartilhada ── */
+@keyframes btnShine {
+    from { left: -80%; }
+    to   { left: 140%; }
+}
+
+/* ── Respeita preferência de movimento reduzido ── */
+@media (prefers-reduced-motion: reduce) {
+    .btn {
+        transition: none;
+
+        &::after { display: none; }
+        &:hover  { transform: none; }
+    }
+}

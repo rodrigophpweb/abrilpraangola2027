@@ -127,6 +127,7 @@ if ( $local ) {
 </script>
 
 <section
+    id="sobre"
     class="about-general"
     aria-label="<?php esc_attr_e( 'Resumo do Evento', 'abril-pra-angola' ); ?>"
     itemscope

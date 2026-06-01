@@ -295,6 +295,37 @@ select {
     font-size: var(--font-size-base);
 }
 
+/* ────────────────────────────────────────────────────
+   ÂNCORAS — Offset do header fixo
+   Garante que as seções não fiquem escondidas atrás do header
+──────────────────────────────────────────────────── */
+#sobre,
+#oficineiros,
+#ingressos,
+#localizacao,
+#inscricao,
+#faq {
+    scroll-margin-top: calc(var(--header-height, 182px) + 1rem); /* 182px + 16px buffer */
+}
+
+/* Classe utilitária reutilizável */
+.anchor-offset {
+    scroll-margin-top: calc(var(--header-height, 182px) + 1rem);
+}
+
+/* Screen-reader text utilitário */
+.screen-reader-text {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
 /* Container utilitário */
 .container {
     width: 100%;

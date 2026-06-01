@@ -3,6 +3,87 @@
  * Comportamentos globais do tema
  */
 
+/* ────────────────────────────────────────────────────
+   NAVEGAÇÃO POR ÂNCORAS — Smooth Scroll com offset
+   • Na home: intercepta cliques no nav e rola suavemente
+     compensando a altura do header fixo.
+   • Em páginas internas: os links levam para /#secao;
+     o browser navega para a home e ao carregar, o JS
+     rola suavemente para a secao correta.
+──────────────────────────────────────────────────── */
+( function () {
+    'use strict';
+
+    // Lê a altura atual do header via CSS custom property
+    function getHeaderHeight() {
+        const raw = getComputedStyle( document.documentElement )
+                        .getPropertyValue( '--header-height' )
+                        .trim();
+        return parseInt( raw, 10 ) || 182;
+    }
+
+    // Rola suavemente até o elemento, compensando o header
+    function scrollToAnchor( target ) {
+        if ( ! target ) return;
+        const offsetTop = target.getBoundingClientRect().top
+                        + window.scrollY
+                        - getHeaderHeight()
+                        - 16; // 16px de buffer extra
+        window.scrollTo( { top: Math.max( 0, offsetTop ), behavior: 'smooth' } );
+    }
+
+    // ── Intercepta cliques nos itens do menu ─────────────
+    document.querySelectorAll( '.site-nav__list a[href*="#"]' ).forEach( function ( link ) {
+        link.addEventListener( 'click', function ( e ) {
+            const href      = link.getAttribute( 'href' ) || '';
+            const hashIndex = href.indexOf( '#' );
+            if ( hashIndex === -1 ) return;
+
+            const hash    = href.slice( hashIndex + 1 );
+            const basePath = href.slice( 0, hashIndex ); // pode ser '', '/', ou URL completa
+
+            // Verifica se a âncora pertence à página atual
+            const currentOrigin   = window.location.origin;
+            const currentPathname = window.location.pathname;
+            const linkIsLocal     = basePath === ''
+                                 || basePath === '/'
+                                 || basePath === currentPathname
+                                 || basePath === currentOrigin + currentPathname
+                                 || basePath === currentOrigin + '/';
+
+            if ( ! linkIsLocal ) return; // deixa o browser navegar para outra página
+
+            const target = document.getElementById( hash );
+            if ( ! target ) return;
+
+            e.preventDefault();
+            scrollToAnchor( target );
+
+            // Atualiza o hash na URL sem recarregar
+            if ( history.pushState ) {
+                history.pushState( null, '', '#' + hash );
+            }
+        } );
+    } );
+
+    // ── Ao carregar a página com hash na URL ─────────────
+    // (caso: usuário veio de página interna com link /#secao)
+    function handleInitialHash() {
+        const hash = window.location.hash.slice( 1 );
+        if ( ! hash ) return;
+        const target = document.getElementById( hash );
+        if ( ! target ) return;
+        // Pequeno delay para garantir que o layout está pronto
+        setTimeout( function () {
+            scrollToAnchor( target );
+        }, 350 );
+    }
+
+    // Executa após carregamento completo (imagens, fontes)
+    window.addEventListener( 'load', handleInitialHash );
+
+} )();
+
 ( function () {
     'use strict';
 

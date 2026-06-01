@@ -190,6 +190,16 @@
         background-color: var(--color-neutral-50);
         display: grid;
         gap: var(--spacing-4);                     /* 1rem / 16px */
+        justify-items: center;                     /* centraliza todos os filhos */
+        text-align: center;
+    }
+
+    /* ── Bloco de investimento ── */
+    & .ticket-card__investment {
+        display: grid;
+        gap: var(--spacing-1);
+        width: 100%;
+        justify-items: center;                     /* centraliza título + preço */
     }
 
     /* ── Título "Investimento" ── */
