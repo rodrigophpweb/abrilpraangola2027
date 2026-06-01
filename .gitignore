@@ -1,6 +1,10 @@
 # Ignorar dados do banco de dados Docker
 db_data/
 
+# Arquivos de ambiente local (não devem ir para o servidor)
+docker-compose.yaml
+uploads.ini
+
 # Arquivos do sistema
 .DS_Store
 Thumbs.db
