@@ -25,7 +25,7 @@ jobs:
           ssh ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
             set -e
 
-            THEME_PATH="/var/www/abrilpraangola.com/htdocs/wp-content/themes/abril-pra-angola"
+            THEME_PATH="/var/www/abrilpraangola.com/htdocs/wp-content/themes/abrilpraangola2027"
 
             echo "📁 Acessando o diretório do tema..."
             cd $THEME_PATH
