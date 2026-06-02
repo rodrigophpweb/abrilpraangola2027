@@ -9,6 +9,7 @@
 .single-person {
     background-color: var(--color-neutral-900);
     min-height: 60vh;
+    margin-top: -2.813rem;
     /* Sem padding-block-start aqui: o offset do header fixo é
        gerido pelo breadcrumb (primeiro filho), assim como
        o hero-banner faz nas outras páginas. O background escuro
@@ -21,9 +22,7 @@
 .single-person__breadcrumb {
     background-color: var(--color-neutral-800);
     border-block-end: var(--border-width-thin) solid rgba(255, 255, 255, 0.06);
-    /* padding-top absorve a altura do header fixo (182px) + espaçamento interno (12px) */
-    padding-block-start: calc(var(--header-height, 182px) + var(--spacing-3));
-    padding-block-end: var(--spacing-3);           /* 12px */
+    padding: 1rem 0;
 }
 
 .single-person__breadcrumb-list {
