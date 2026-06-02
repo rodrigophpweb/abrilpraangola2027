@@ -399,7 +399,7 @@ add_action( 'acf/save_post', function( $post_id ) {
 
 
 // ═══════════════════════════════════════════════════════════════
-// 5. OFICINEIROS — Status do Mestre e Redes Sociais
+// 5. OFICINEIROS — Nome do Grupo/Escola e Redes Sociais
 // ═══════════════════════════════════════════════════════════════
 // Registrado via acf/init para garantir que abril_get_social_network_choices()
 // esteja disponível (definida em page-options.php, carregado após meta-boxes.php).
@@ -469,4 +469,77 @@ add_action( 'acf/init', function () {
         ],
     ] );
 } );
+
+
+// ═══════════════════════════════════════════════════════════════
+// 6. HOMENAGEADOS — Nome do Grupo/Escola e Redes Sociais
+// ═══════════════════════════════════════════════════════════════
+// Mesma estrutura do grupo de Oficineiros, aplicado ao CPT "homenageado".
+add_action( 'acf/init', function () {
+    if ( ! function_exists( 'acf_add_local_field_group' ) ) {
+        return;
+    }
+
+    $social_choices = function_exists( 'abril_get_social_network_choices' )
+        ? abril_get_social_network_choices()
+        : [];
+
+    acf_add_local_field_group( [
+        'key'      => 'group_homenageado_detalhes',
+        'title'    => '🏆 Dados do Homenageado',
+        'location' => [ [ [ 'param' => 'post_type', 'operator' => '==', 'value' => 'homenageado' ] ] ],
+        'position' => 'normal',
+        'style'    => 'default',
+        'fields'   => [
+
+            // ── Nome do Grupo ou Escola ────────────────────
+            [
+                'key'          => 'field_homenageado_grupo_escola',
+                'name'         => 'homenageado_grupo_escola',
+                'label'        => '🏫 Nome do Grupo ou Escola',
+                'type'         => 'text',
+                'required'     => 0,
+                'placeholder'  => 'Ex: Grupo Capoeira Angola Palmares',
+                'wrapper'      => [ 'width' => '50' ],
+                'instructions' => 'Informe o nome do grupo, escola ou associação de capoeira do homenageado.',
+            ],
+
+            // ── Repeater: Redes Sociais ────────────────────
+            [
+                'key'          => 'field_homenageado_redes_sociais',
+                'name'         => 'homenageado_redes_sociais',
+                'label'        => '🔗 Redes Sociais',
+                'type'         => 'repeater',
+                'instructions' => 'Adicione as redes sociais do homenageado. O ícone será exibido automaticamente via Font Awesome.',
+                'layout'       => 'row',
+                'button_label' => 'Adicionar Rede Social',
+                'collapsed'    => 'field_homenageado_rede_social_nome',
+                'sub_fields'   => [
+                    [
+                        'key'        => 'field_homenageado_rede_social_nome',
+                        'label'      => 'Rede Social',
+                        'name'       => 'rede_social',
+                        'type'       => 'select',
+                        'required'   => 1,
+                        'ui'         => 1,
+                        'allow_null' => 0,
+                        'choices'    => $social_choices,
+                        'wrapper'    => [ 'width' => '40' ],
+                    ],
+                    [
+                        'key'         => 'field_homenageado_rede_social_url',
+                        'label'       => 'URL da Rede',
+                        'name'        => 'rede_social_url',
+                        'type'        => 'url',
+                        'required'    => 1,
+                        'placeholder' => 'https://...',
+                        'wrapper'     => [ 'width' => '60' ],
+                    ],
+                ],
+            ],
+
+        ],
+    ] );
+} );
+
 

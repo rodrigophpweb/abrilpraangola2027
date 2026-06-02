@@ -15,7 +15,6 @@
         </article>
     <?php endwhile; endif; ?>
     <?php
-
         get_template_part( 'template-parts/section-schedule' );
         get_template_part( 'template-parts/section', 'speakers' );
         get_template_part( 'template-parts/section-tickets' );
