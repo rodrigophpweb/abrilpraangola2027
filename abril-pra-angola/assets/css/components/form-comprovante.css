@@ -8,7 +8,6 @@
    PÁGINA WRAPPER
    ──────────────────────────────────────────────────── */
 .page-comprovante {
-    padding-block: var(--spacing-12) var(--spacing-24);
     background-color: var(--color-bg-alt);
     min-height: 100svh;
 

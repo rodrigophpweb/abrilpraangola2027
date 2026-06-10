@@ -8,8 +8,6 @@
    PÁGINA WRAPPER
    ──────────────────────────────────────────────────── */
 .page-inscricao {
-    padding-block: var(--spacing-12) var(--spacing-24);
-    background-color: var(--color-bg-alt);
     min-height: 100svh;
 
     & .page-inscricao__header {
@@ -46,6 +44,7 @@
 .form-inscricao {
     display: grid;
     gap: var(--spacing-6);
+    padding-bottom: var(--spacing-12);
 
     @media (min-width: 768px) {
         gap: var(--spacing-8);

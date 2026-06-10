@@ -4,11 +4,6 @@
    Breakpoints: lg 1024px (menu desktop)
    ==================================================== */
 
-/* ── Altura do header como variável global ── */
-:root {
-    --header-height: 182px; /* logo 150px + padding-block 16px × 2 */
-}
-
 /* ────────────────────────────────────────────────────
    HEADER WRAPPER — fixo, com hide/show no scroll
    ──────────────────────────────────────────────────── */

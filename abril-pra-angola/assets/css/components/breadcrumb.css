@@ -1,0 +1,87 @@
+/* ====================================================
+   COMPONENTE — BREADCRUMB (Trilha de navegação)
+   Projeto: Abril pra Angola
+   Layout: CSS Grid exclusivamente | sem Flexbox
+   Unidade: rem (base 16px = 1rem)
+   ==================================================== */
+
+.breadcrumb {
+    background-color: var(--color-neutral-800);
+    border-block-end: var(--border-width-thin) solid rgba(255, 255, 255, 0.06);
+    padding-block: var(--spacing-4);                 /* 16px */
+    margin-bottom: var(--spacing-12);
+}
+
+.breadcrumb__list {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: max-content;
+    align-items: center;
+    gap: var(--spacing-2);                            /* 8px */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow-x: auto;                                /* não quebra em telas estreitas */
+    scrollbar-width: none;                           /* Firefox */
+}
+
+.breadcrumb__list::-webkit-scrollbar {
+    display: none;                                   /* WebKit */
+}
+
+.breadcrumb__item {
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+    gap: var(--spacing-2);
+    font-size: var(--font-size-sm);                  /* 14px */
+    color: var(--color-neutral-400);
+    white-space: nowrap;
+}
+
+/* Separador "/" via pseudo-elemento */
+.breadcrumb__item:not(:last-child)::after {
+    content: '/';
+    color: var(--color-neutral-600);
+    font-weight: var(--font-weight-light);
+}
+
+.breadcrumb__link {
+    display: grid;
+    grid-auto-flow: column;
+    align-items: center;
+    gap: var(--spacing-1);                           /* 4px */
+    color: var(--color-neutral-400);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.breadcrumb__link:hover {
+    color: var(--color-primary-0);
+}
+
+.breadcrumb__link:focus-visible {
+    outline: var(--border-width-base) solid var(--color-primary-0);
+    outline-offset: 0.25rem;
+    border-radius: var(--radius-sm);
+    color: var(--color-primary-0);
+}
+
+.breadcrumb__link i {
+    font-size: var(--font-size-xs);                  /* 12px */
+}
+
+.breadcrumb__item--current {
+    color: var(--color-neutral-200);
+    font-weight: var(--font-weight-medium);
+}
+
+/* ────────────────────────────────────────────────────
+   ACESSIBILIDADE — REDUCED MOTION
+   ──────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    .breadcrumb__link {
+        transition: none;
+    }
+}
+

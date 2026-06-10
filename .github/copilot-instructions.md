@@ -595,6 +595,56 @@ add_action( 'wp_enqueue_scripts', 'apla_enqueue_assets' );
 
 ---
 
+### CSS específico por página — carregamento condicional obrigatório
+
+> **Regra inegociável:** cada página carrega **somente** o CSS de que ela depende. Nada além disso.
+
+- **Toda página tem o seu conjunto próprio de estilos.** Ao criar uma nova página, template ou componente, enfileire **apenas** os arquivos CSS que aquela página realmente usa (ex.: `header`, `footer`, `form-contact`).
+- **Nunca** carregue componentes globalmente "por garantia". Um componente só entra na página onde é renderizado.
+- O carregamento condicional é feito no `inc/style-and-script.php` (ou `inc/enqueue.php`) usando as condicionais do WordPress: `is_front_page()`, `is_page()`, `is_page_template()`, `is_single()`, `is_search()`, etc.
+- **Proibido `@import` em CSS de produção.** Importar componentes via `@import` dentro de um arquivo de página gera requisições extras e carregamento duplicado (o WordPress já enfileira o componente). Todo componente entra via `wp_enqueue_style()`.
+- **Apenas três camadas carregam em todas as páginas:** os design tokens (`variables.css`), a folha base do tema e os componentes verdadeiramente globais (ex.: `header`, `footer`, `button`). Todo o resto é condicional.
+- Declare as **dependências** corretas no `wp_enqueue_style()` (4º parâmetro) para garantir ordem de cascata previsível — ex.: um componente que usa tokens depende de `'abril-variables'`.
+- Se um arquivo de página (`pages/*.css`) ficar vazio porque toda a estilização foi para componentes, **exclua o arquivo** e remova o seu enqueue. Não deixe arquivos órfãos.
+
+#### ✅ Preferir — cada página enfileira só o que usa
+
+```php
+// Componentes globais — em TODAS as páginas
+wp_enqueue_style( 'abril-header', $components_uri . 'header.css', [ 'abril-variables' ], $version );
+wp_enqueue_style( 'abril-footer', $components_uri . 'footer.css', [ 'abril-variables' ], $version );
+
+// Componente condicional — só na página de contato
+if ( is_page_template( 'template-pages/contato.php' ) || is_page( 'contato' ) ) {
+    wp_enqueue_style( 'abril-form-contact', $components_uri . 'form-contact.css', [ 'abril-variables' ], $version );
+}
+```
+
+#### ❌ Evitar — carregar tudo em toda página / usar @import
+
+```php
+// ❌ Componente de formulário carregado em TODAS as páginas
+wp_enqueue_style( 'abril-form-contact', $components_uri . 'form-contact.css', [], $version );
+```
+
+```css
+/* ❌ pages/contato.css — @import gera requisição extra + carregamento duplicado */
+@import '../components/form-contact.css';
+```
+
+#### Mapa de carregamento (exemplo do projeto)
+
+| Página | CSS carregado |
+|--------|---------------|
+| **Todas** | `variables`, `style` base, `header`, `footer`, `button` |
+| **Contato** | + `alert`, `form-contact`, `breadcrumb` |
+| **Home** | + `hero-banner`, `about-general`, `picture-content`, `faq`, `sponsors`, `speakers`, `schedule`, `tickets`, `subscribe`, `location` |
+| **Single** | + `breadcrumb`, `single` |
+| **Inscrição** | + `alert`, `form-subscribe`, `breadcrumb` |
+| **Busca** | + `searchform`, `search` |
+
+---
+
 ## Regra Principal
 
 > Antes de escrever código customizado, verifique se o WordPress já resolve nativamente via hooks, funções do core ou WP_Query.

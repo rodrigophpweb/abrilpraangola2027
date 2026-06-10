@@ -84,6 +84,15 @@ $status_inscricao = $inscrito ? get_field( 'inscrito_status', $inscrito->ID ) : 
 ?>
 
 <main id="main" class="page-comprovante">
+
+    <?php
+    get_template_part( 'template-parts/breadcrumb', null, [
+        'items' => [
+            [ 'label' => get_the_title(), 'url' => '' ],
+        ],
+    ] );
+    ?>
+
     <div class="container">
 
         <header class="page-comprovante__header">

@@ -9,8 +9,6 @@
    WRAPPER DA PÁGINA
    ──────────────────────────────────────────────────── */
 .page-contato {
-    padding-block-start: calc(var(--header-height, 182px) + var(--spacing-16));
-    padding-block-end: var(--spacing-24);
     min-height: 100svh;
     background-color: var(--color-bg-alt);
 }

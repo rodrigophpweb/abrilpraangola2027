@@ -21,6 +21,14 @@ $pacote_preselect = intval( get_query_var( 'pkg_id', $_GET['pkg_id'] ?? 0 ) );
 
 <main id="main" class="page-inscricao">
 
+    <?php
+    get_template_part( 'template-parts/breadcrumb', null, [
+        'items' => [
+            [ 'label' => get_the_title(), 'url' => '' ],
+        ],
+    ] );
+    ?>
+
     <div class="container">
         <header class="page-inscricao__header">
             <h1>Inscrição — Abril pra Angola 2027</h1>

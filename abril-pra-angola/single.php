@@ -62,57 +62,20 @@ $choices = function_exists( 'abril_get_social_network_choices' ) ? abril_get_soc
         $archive_label = $is_homenageado
             ? __( 'Homenageados', 'abril-pra-angola' )
             : __( 'Oficineiros', 'abril-pra-angola' );
+
+        $breadcrumb_items = [];
+        if ( $archive_url ) {
+            $breadcrumb_items[] = [ 'label' => $archive_label, 'url' => $archive_url ];
+        }
+        $breadcrumb_items[] = [ 'label' => $post_title, 'url' => '' ];
     ?>
 
     <!-- ── Breadcrumb ──────────────────────────────────────────────────── -->
-    <nav
-        class="single-person__breadcrumb"
-        aria-label="<?php esc_attr_e( 'Breadcrumb de navegação', 'abril-pra-angola' ); ?>"
-        itemscope
-        itemtype="https://schema.org/BreadcrumbList"
-    >
-        <div class="container">
-            <ol class="single-person__breadcrumb-list">
-                <li
-                    class="single-person__breadcrumb-item"
-                    itemprop="itemListElement"
-                    itemscope
-                    itemtype="https://schema.org/ListItem"
-                >
-                    <a itemprop="item" href="<?php echo esc_url( home_url( '/' ) ); ?>">
-                        <i class="fa-solid fa-house" aria-hidden="true"></i>
-                        <span itemprop="name"><?php esc_html_e( 'Home', 'abril-pra-angola' ); ?></span>
-                    </a>
-                    <meta itemprop="position" content="1">
-                </li>
-
-                <?php if ( $archive_url ) : ?>
-                <li
-                    class="single-person__breadcrumb-item"
-                    itemprop="itemListElement"
-                    itemscope
-                    itemtype="https://schema.org/ListItem"
-                >
-                    <a itemprop="item" href="<?php echo esc_url( $archive_url ); ?>">
-                        <span itemprop="name"><?php echo esc_html( $archive_label ); ?></span>
-                    </a>
-                    <meta itemprop="position" content="2">
-                </li>
-                <?php endif; ?>
-
-                <li
-                    class="single-person__breadcrumb-item single-person__breadcrumb-item--current"
-                    itemprop="itemListElement"
-                    itemscope
-                    itemtype="https://schema.org/ListItem"
-                    aria-current="page"
-                >
-                    <span itemprop="name"><?php echo esc_html( $post_title ); ?></span>
-                    <meta itemprop="position" content="<?php echo $archive_url ? '3' : '2'; ?>">
-                </li>
-            </ol>
-        </div>
-    </nav><!-- /.single-person__breadcrumb -->
+    <?php
+    get_template_part( 'template-parts/breadcrumb', null, [
+        'items' => $breadcrumb_items,
+    ] );
+    ?>
 
     <!-- ── Artigo principal ────────────────────────────────────────────── -->
     <article

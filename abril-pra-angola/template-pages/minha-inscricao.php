@@ -38,6 +38,15 @@ $icones_status = [
 ?>
 
 <main id="main" class="page-minha-inscricao">
+
+    <?php
+    get_template_part( 'template-parts/breadcrumb', null, [
+        'items' => [
+            [ 'label' => get_the_title(), 'url' => '' ],
+        ],
+    ] );
+    ?>
+
     <div class="container">
 
         <header class="page-minha-inscricao__header">

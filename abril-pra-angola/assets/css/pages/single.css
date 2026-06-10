@@ -17,64 +17,8 @@
 
 /* ────────────────────────────────────────────────────
    BREADCRUMB
+   Estilos no componente: assets/css/components/breadcrumb.css
    ──────────────────────────────────────────────────── */
-.single-person__breadcrumb {
-    background-color: var(--color-neutral-800);
-    border-block-end: var(--border-width-thin) solid rgba(255, 255, 255, 0.06);
-    padding: 1rem 0;
-}
-
-.single-person__breadcrumb-list {
-    display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: max-content;
-    align-items: center;
-    gap: var(--spacing-2);                         /* 8px */
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    overflow-x: auto;                              /* mobile scroll sem quebrar */
-}
-
-.single-person__breadcrumb-item {
-    display: grid;
-    grid-auto-flow: column;
-    align-items: center;
-    gap: var(--spacing-2);
-    font-size: var(--font-size-sm);                /* 14px */
-    color: var(--color-neutral-400);
-    white-space: nowrap;
-}
-
-/* Separador via pseudo-elemento */
-.single-person__breadcrumb-item:not(:last-child)::after {
-    content: '/';
-    color: var(--color-neutral-600);
-    font-weight: var(--font-weight-light);
-}
-
-.single-person__breadcrumb-item a {
-    display: grid;
-    grid-auto-flow: column;
-    align-items: center;
-    gap: var(--spacing-1);                         /* 4px */
-    color: var(--color-neutral-400);
-    text-decoration: none;
-    transition: color var(--transition-fast);
-}
-
-.single-person__breadcrumb-item a:hover {
-    color: var(--color-primary-0);
-}
-
-.single-person__breadcrumb-item a i {
-    font-size: var(--font-size-xs);               /* 12px */
-}
-
-.single-person__breadcrumb-item--current {
-    color: var(--color-neutral-200);
-    font-weight: var(--font-weight-medium);
-}
 
 /* ────────────────────────────────────────────────────
    ARTIGO — LAYOUT PRINCIPAL

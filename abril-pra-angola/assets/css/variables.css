@@ -296,6 +296,14 @@ select {
     font-size: var(--font-size-base);
 }
 
+main {
+    padding-top: 11.438rem;
+}
+
+.home main {
+    padding-top: 0;
+}
+
 /* ────────────────────────────────────────────────────
    ÂNCORAS — Offset do header fixo
    Garante que as seções não fiquem escondidas atrás do header

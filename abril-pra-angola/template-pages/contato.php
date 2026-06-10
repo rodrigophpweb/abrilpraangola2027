@@ -20,6 +20,14 @@ $status = sanitize_key( $_GET['contato'] ?? '' );
     itemscope
     itemtype="https://schema.org/ContactPage"
 >
+    <?php
+    get_template_part( 'template-parts/breadcrumb', null, [
+        'items' => [
+            [ 'label' => get_the_title(), 'url' => '' ],
+        ],
+    ] );
+    ?>
+
     <div class="container">
 
         <!-- ═══════════════════════════════════════════════
@@ -30,8 +38,7 @@ $status = sanitize_key( $_GET['contato'] ?? '' );
                 <?php the_title(); ?>
             </h1>
             <p class="page-contato__subtitle">
-                Tem alguma dúvida, sugestão ou deseja mais informações sobre o evento?
-                Preencha o formulário abaixo e entraremos em contato em breve.
+                <?php the_content();?>
             </p>
         </header>
 
