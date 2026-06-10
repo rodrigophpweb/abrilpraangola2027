@@ -9,6 +9,7 @@ require_once get_template_directory() . '/inc/style-and-script.php';
 require_once get_template_directory() . '/inc/custom-post-types.php';
 require_once get_template_directory() . '/inc/meta-boxes.php';
 require_once get_template_directory() . '/inc/form-handler.php';
+require_once get_template_directory() . '/inc/contact-handler.php';
 require_once get_template_directory() . '/inc/subscriber-admin.php';
 require_once get_template_directory() . '/inc/admin-columns.php';
 require_once get_template_directory() . '/inc/page-options.php';

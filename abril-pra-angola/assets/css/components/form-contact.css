@@ -1,0 +1,394 @@
+/* ====================================================
+   COMPONENTE — FORMULÁRIO DE CONTATO
+   CSS Nesting + CSS Grid | Sem Flexbox | Sem Float
+   Arquivo: assets/css/components/form-contact.css
+   ==================================================== */
+
+
+/* ────────────────────────────────────────────────────
+   WRAPPER DA PÁGINA
+   ──────────────────────────────────────────────────── */
+.page-contato {
+    padding-block-start: calc(var(--header-height, 182px) + var(--spacing-16));
+    padding-block-end: var(--spacing-24);
+    min-height: 100svh;
+    background-color: var(--color-bg-alt);
+}
+
+
+/* ────────────────────────────────────────────────────
+   CABEÇALHO
+   ──────────────────────────────────────────────────── */
+.page-contato__header {
+    text-align: center;
+    margin-block-end: var(--spacing-12);
+}
+
+.page-contato__title {
+    font-size: clamp(1.75rem, 1.5rem + 1vw, var(--font-size-4xl));
+    font-weight: var(--font-weight-extrabold);
+    color: var(--color-neutral-800);
+    margin-block-end: var(--spacing-4);
+    line-height: var(--line-height-tight);
+
+    /* Linha decorativa dourada — padrão do projeto */
+    &::after {
+        content: "";
+        display: block;
+        width: 3rem;
+        height: 0.25rem;
+        background-color: var(--color-primary-0);
+        border-radius: var(--radius-full);
+        margin-block-start: var(--spacing-4);
+        margin-inline: auto;
+    }
+}
+
+.page-contato__subtitle {
+    font-size: clamp(var(--font-size-base), 0.9rem + 0.3vw, var(--font-size-md));
+    color: var(--color-text-muted);
+    line-height: var(--line-height-relaxed);
+    max-width: 42rem;
+    margin-inline: auto;
+}
+
+
+/* ────────────────────────────────────────────────────
+   GRID PRINCIPAL — Formulário + Sidebar info
+   Layout: coluna única → 2 colunas no desktop
+   ──────────────────────────────────────────────────── */
+.page-contato__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-10);
+    align-items: start;
+
+    @media (width >= 56rem) {
+        grid-template-columns: 1fr 20rem;
+        gap: var(--spacing-12);
+    }
+
+    @media (width >= 70rem) {
+        grid-template-columns: 1fr 22rem;
+    }
+}
+
+
+/* ────────────────────────────────────────────────────
+   CARD DO FORMULÁRIO
+   ──────────────────────────────────────────────────── */
+.page-contato__form-wrap {
+    background-color: var(--color-neutral-0);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-8);
+    box-shadow: var(--shadow-lg);
+    border: var(--border-width-thin) solid var(--color-border);
+
+    @media (width >= 40rem) {
+        padding: var(--spacing-10);
+    }
+}
+
+
+/* ────────────────────────────────────────────────────
+   FORMULÁRIO
+   ──────────────────────────────────────────────────── */
+.form-contato {
+    display: grid;
+    gap: var(--spacing-6);
+}
+
+/* Linha com 2 campos lado a lado (nome+email / telefone+assunto) */
+.form-contato__row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-6);
+
+    @media (width >= 40rem) {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+
+/* ────────────────────────────────────────────────────
+   FORM GROUP — label + input
+   ──────────────────────────────────────────────────── */
+.form-group {
+    display: grid;
+    gap: var(--spacing-2);
+
+    & label {
+        font-size: var(--font-size-sm);
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-neutral-700);
+        letter-spacing: var(--letter-spacing-wide);
+    }
+
+    /* Asterisco de obrigatoriedade */
+    & .form-group__required {
+        color: var(--color-error);
+        margin-inline-start: var(--spacing-1);
+    }
+
+    /* Inputs, textarea e select */
+    & input[type="text"],
+    & input[type="email"],
+    & input[type="tel"],
+    & select,
+    & textarea {
+        width: 100%;
+        padding: var(--spacing-3) var(--spacing-4);
+        border: var(--border-width-thin) solid var(--color-border);
+        border-radius: var(--radius-md);
+        font-size: var(--font-size-base);
+        font-family: var(--font-family-base);
+        color: var(--color-text);
+        background-color: var(--color-neutral-0);
+        transition:
+            border-color var(--transition-fast),
+            box-shadow var(--transition-fast),
+            background-color var(--transition-fast);
+
+        &::placeholder {
+            color: var(--color-neutral-400);
+            font-weight: var(--font-weight-light);
+        }
+
+        &:hover {
+            border-color: var(--color-neutral-400);
+        }
+
+        &:focus {
+            border-color: var(--color-primary-400);
+            box-shadow: 0 0 0 3px var(--color-primary-100);
+            outline: none;
+        }
+
+        &:focus-visible {
+            outline: 3px solid var(--color-primary-300);
+            outline-offset: 2px;
+        }
+
+        &:invalid:not(:placeholder-shown) {
+            border-color: var(--color-error);
+            background-color: #fef2f2;
+        }
+    }
+
+    /* Select — seta customizada */
+    & select {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23767676' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right var(--spacing-4) center;
+        padding-inline-end: var(--spacing-10);
+        cursor: pointer;
+    }
+
+    /* Textarea — não permite redimensionar horizontalmente */
+    & textarea {
+        resize: vertical;
+        min-height: 8rem;
+        line-height: var(--line-height-relaxed);
+    }
+}
+
+
+/* ────────────────────────────────────────────────────
+   NOTA CAMPOS OBRIGATÓRIOS
+   ──────────────────────────────────────────────────── */
+.form-contato__required-note {
+    font-size: var(--font-size-xs);
+    color: var(--color-text-muted);
+    margin-block-start: calc(var(--spacing-2) * -1);
+
+    & span {
+        color: var(--color-error);
+        font-weight: var(--font-weight-bold);
+    }
+}
+
+
+/* ────────────────────────────────────────────────────
+   ÁREA DE SUBMIT
+   ──────────────────────────────────────────────────── */
+.form-contato__submit {
+    display: grid;
+    justify-items: stretch;
+    padding-block-start: var(--spacing-2);
+
+    @media (width >= 40rem) {
+        justify-items: end;
+    }
+}
+
+
+/* ────────────────────────────────────────────────────
+   SIDEBAR DE INFORMAÇÕES
+   ──────────────────────────────────────────────────── */
+.page-contato__info {
+    display: grid;
+    gap: var(--spacing-8);
+    align-content: start;
+}
+
+.page-contato__info-title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-neutral-800);
+    padding-block-end: var(--spacing-4);
+    border-block-end: var(--border-width-base) solid var(--color-primary-0);
+}
+
+
+/* ── Lista de informações ─────────────────────────── */
+.page-contato__info-list {
+    display: grid;
+    gap: var(--spacing-6);
+}
+
+.page-contato__info-item {
+    display: grid;
+    grid-template-columns: 2.5rem 1fr;
+    gap: var(--spacing-4);
+    align-items: start;
+}
+
+.page-contato__info-icon {
+    display: grid;
+    place-items: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: var(--color-primary-100);
+    border-radius: var(--radius-md);
+    color: var(--color-primary-600);
+    font-size: var(--font-size-md);
+    flex-shrink: 0;
+}
+
+.page-contato__info-content {
+    display: grid;
+    gap: var(--spacing-1);
+
+    & strong {
+        font-size: 0.6875rem; /* 11px — menor que --font-size-sm para label de metadata */
+        font-weight: var(--font-weight-semibold);
+        color: var(--color-neutral-700);
+        letter-spacing: var(--letter-spacing-wide);
+        text-transform: uppercase;
+    }
+
+    & a,
+    & span,
+    & address {
+        font-size: var(--font-size-base);
+        color: var(--color-text);
+        font-style: normal;
+        line-height: var(--line-height-snug);
+    }
+
+    & a {
+        color: var(--color-primary-600);
+        text-decoration: none;
+        transition: color var(--transition-fast);
+
+        &:hover {
+            color: var(--color-primary-800);
+            text-decoration: underline;
+        }
+
+        &:focus-visible {
+            outline: 3px solid var(--color-primary-300);
+            outline-offset: 2px;
+            border-radius: var(--radius-sm);
+        }
+    }
+}
+
+
+/* ── Redes Sociais ────────────────────────────────── */
+.page-contato__social {
+    display: grid;
+    gap: var(--spacing-4);
+    padding-block-start: var(--spacing-6);
+    border-block-start: var(--border-width-thin) solid var(--color-border);
+}
+
+.page-contato__social-label {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-muted);
+    letter-spacing: var(--letter-spacing-wide);
+}
+
+.page-contato__social-list {
+    display: grid;
+    grid-template-columns: repeat(3, 2.75rem);
+    gap: var(--spacing-3);
+    justify-items: start;
+
+    & li a {
+        display: grid;
+        place-items: center;
+        width: 2.75rem;
+        height: 2.75rem;
+        border-radius: var(--radius-md);
+        background-color: var(--color-neutral-100);
+        color: var(--color-neutral-700);
+        font-size: var(--font-size-lg);
+        text-decoration: none;
+        transition:
+            background-color var(--transition-fast),
+            color var(--transition-fast),
+            transform var(--transition-fast);
+
+        &:hover {
+            transform: translateY(-0.125rem);
+        }
+
+        &:focus-visible {
+            outline: 3px solid var(--color-primary-300);
+            outline-offset: 3px;
+        }
+
+        /* Cores das redes sociais no hover */
+        &[href*="instagram"]:hover {
+            background-color: #e1306c;
+            color: #fff;
+        }
+
+        &[href*="facebook"]:hover {
+            background-color: #1877f2;
+            color: #fff;
+        }
+
+        &[href*="youtube"]:hover {
+            background-color: #ff0000;
+            color: #fff;
+        }
+
+        &[href*="whatsapp"]:hover {
+            background-color: #25d366;
+            color: #fff;
+        }
+    }
+}
+
+
+/* ────────────────────────────────────────────────────
+   PREFERÊNCIA DE MOVIMENTO REDUZIDO
+   ──────────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+    .form-group input,
+    .form-group select,
+    .form-group textarea,
+    .page-contato__social-list li a {
+        transition: none;
+    }
+
+    .page-contato__social-list li a:hover {
+        transform: none;
+    }
+}
+
+

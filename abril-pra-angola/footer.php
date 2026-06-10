@@ -1,5 +1,5 @@
 <footer>
-    <nav>
+    <nav class="container">
         <?php
         $edicao_evento = function_exists( 'get_field' )
             ? get_field( 'edicao_evento', 'option' )

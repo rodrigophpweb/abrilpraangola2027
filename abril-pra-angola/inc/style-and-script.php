@@ -206,7 +206,7 @@ function abril_enqueue_styles_and_scripts() {
 
         // Contato
         [
-            'condition' => is_page( 'contato' ),
+            'condition' => is_page_template( 'template-pages/contato.php' ) || is_page( 'contato' ),
             'handle'    => 'abril-page-contato',
             'file'      => 'contato.css',
         ],
